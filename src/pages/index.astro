@@ -2,9 +2,17 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import { getCollection } from "astro:content";
+import { LINKEDIN_URL } from "../consts";
 
 const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
-const featured = projects.slice(0, 3);
+
+// Featured projects: in-progress work leads (it's the most relevant signal
+// of active effort), falling back to program sequencing (`order`).
+const featureRank = (status: (typeof projects)[number]["data"]["status"]) =>
+  status === "in-progress" ? 0 : 1;
+const featured = [...projects]
+  .sort((a, b) => featureRank(a.data.status) - featureRank(b.data.status) || a.data.order - b.data.order)
+  .slice(0, 3);
 
 const credentials = [
   "PMP",
@@ -16,13 +24,11 @@ const credentials = [
   "Microsoft Purview",
   "AWS Certified",
 ];
-
-const linkedInUrl = "https://www.linkedin.com/in/asare-kwasi";
 ---
 
 <BaseLayout title="Kwasi Asare">
   <section class="section hero">
-    <div class="wrap hero-grid">
+    <div class="wrap">
       <div>
         <p class="eyebrow">Senior Systems Engineer</p>
         <h1>Kwasi Asare</h1>
@@ -34,7 +40,7 @@ const linkedInUrl = "https://www.linkedin.com/in/asare-kwasi";
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="/projects/">See the projects</a>
-          <a class="btn btn-secondary" href={linkedInUrl} target="_blank" rel="noopener noreferrer">
+          <a class="btn btn-secondary" href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
             LinkedIn
           </a>
         </div>
@@ -58,13 +64,14 @@ const linkedInUrl = "https://www.linkedin.com/in/asare-kwasi";
         <p>
           Six sequenced projects — identity lifecycle automation,
           configuration-as-code, landing zone infrastructure, a security
-          reporting dashboard, containerization, and this site itself — each
-          shipped as an independent, public repository with its own CI.
+          reporting dashboard, containerization, and this site itself —
+          each shipping as an independent, public repository with its own
+          CI.
         </p>
       </div>
       <div class="card credentials-card">
         <h2>Certifications &amp; credentials</h2>
-        <ul class="credential-list">
+        <ul class="credential-list" role="list">
           {credentials.map((c) => (
             <li class="chip">{c}</li>
           ))}
@@ -79,11 +86,15 @@ const linkedInUrl = "https://www.linkedin.com/in/asare-kwasi";
         <h2 id="featured-heading">Featured projects</h2>
         <a class="section-head-link" href="/projects/">All projects →</a>
       </div>
-      <div class="project-grid">
-        {featured.map((project) => (
-          <ProjectCard project={project} />
-        ))}
-      </div>
+      {featured.length === 0 ? (
+        <p class="empty-state">No projects published yet — check back soon.</p>
+      ) : (
+        <div class="project-grid">
+          {featured.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      )}
     </div>
   </section>
 </BaseLayout>
@@ -167,6 +178,11 @@ const linkedInUrl = "https://www.linkedin.com/in/asare-kwasi";
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.25rem;
+  }
+
+  .empty-state {
+    color: var(--color-text-muted);
+    padding: 2rem 0;
   }
 
   @media (max-width: 800px) {

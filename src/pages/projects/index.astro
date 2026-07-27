@@ -12,15 +12,19 @@ const projects = (await getCollection("projects")).sort((a, b) => a.data.order -
       <p class="eyebrow">Program</p>
       <h1>Projects</h1>
       <p class="intro">
-        Six projects, built and shipped in sequence, each an independent
-        public repository with its own CI. Status badges are honest: nothing
-        here is marked shipped until it has a green pipeline and a live repo.
+        Six sequenced projects, each shipping as an independent public
+        repository with its own CI. Status badges are honest: nothing here
+        is marked shipped until it has a green pipeline and a live repo.
       </p>
-      <div class="project-grid">
-        {projects.map((project) => (
-          <ProjectCard project={project} />
-        ))}
-      </div>
+      {projects.length === 0 ? (
+        <p class="empty-state">No projects published yet — check back soon.</p>
+      ) : (
+        <div class="project-grid">
+          {projects.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      )}
     </div>
   </section>
 </BaseLayout>
@@ -51,5 +55,10 @@ const projects = (await getCollection("projects")).sort((a, b) => a.data.order -
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.25rem;
+  }
+
+  .empty-state {
+    color: var(--color-text-muted);
+    padding: 2rem 0;
   }
 </style>
