@@ -1,7 +1,7 @@
 ---
 title: "Intune-as-Code"
 order: 2
-status: "planned"
+status: "in-progress"
 epic: "EP-2"
 summary: "Microsoft Intune configuration managed like software: exported to Git, reviewed via PR, and deployed through a pipeline with drift detection."
 problem: >
@@ -20,7 +20,7 @@ architecture: >
   workflow that opens a GitHub issue if the live tenant no longer matches the
   repo. Authentication to Microsoft Graph uses an Entra app registration with
   OIDC federated credentials — no client secrets stored anywhere.
-demo: "In development — this project starts after Identity Lifecycle Automation (EP-1) ships and reuses its dev tenant and auth foundation."
+demo: "Built alongside Identity Lifecycle Automation (EP-1), reusing its dev tenant and auth foundation — awaiting publication."
 stack:
   - "Microsoft Graph API"
   - "PowerShell"

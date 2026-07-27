@@ -1,7 +1,7 @@
 ---
 title: "Security Reporting Dashboard"
 order: 4
-status: "planned"
+status: "in-progress"
 epic: "EP-4"
 summary: "A live security posture dashboard over Intune and Defender data — the reporting layer a security-focused endpoint engineer wishes the portal had."
 problem: >
@@ -15,14 +15,14 @@ architecture: >
   Timer-triggered Azure Functions pull compliance status, ASR events,
   Defender alerts and secure score, stale device data, and Conditional Access
   sign-in failures from Microsoft Graph into Log Analytics custom tables,
-  with a committed library of 10+ KQL queries. A small web app (FastAPI or
-  Flask) queries the workspace through the Log Analytics Query API and
+  with a committed library of 10+ KQL queries. A small web app (FastAPI)
+  queries the workspace through the Log Analytics Query API and
   renders compliance trend, ASR hits by rule, alert severity mix, stale
   device list, and CA failure hotspots, plus an "automation activity" page
   surfacing the audit trail from Identity Lifecycle Automation. The app is
   deployed from a pipeline behind Entra authentication, using managed
   identity to reach Log Analytics.
-demo: "In development — fourth in the program build order, after Azure Landing Zone."
+demo: "Fourth in the program build order, after Azure Landing Zone — built, awaiting publication."
 stack:
   - "KQL"
   - "Log Analytics"

@@ -1,7 +1,7 @@
 ---
 title: "Azure Landing Zone"
 order: 3
-status: "planned"
+status: "in-progress"
 epic: "EP-3"
 summary: "A miniature enterprise landing zone deployed entirely from Bicep — management groups, policy, hub-spoke networking, and an AVD proof of concept."
 problem: >
@@ -23,7 +23,7 @@ architecture: >
   deployed on demand and the AVD session host stays deallocated by default to
   control cost, with a budget alert configured. Authentication uses OIDC
   federated credentials to Azure — no stored secrets.
-demo: "In development — third in the program build order, after Intune-as-Code."
+demo: "Third in the program build order, after Intune-as-Code — built, awaiting publication."
 stack:
   - "Bicep"
   - "Azure Policy"
@@ -34,6 +34,6 @@ stack:
 repoName: "azure-landing-zone"
 ---
 
-Third project in the program build order. Early Bicep scaffolding exists in
-the working repo; deployment has not run yet. See Jira epic
+Third project in the program build order. A complete Bicep module library
+is built in the working repo, awaiting publication. See Jira epic
 [EP-3](https://spreadcomgh.atlassian.net/browse/EP-3).

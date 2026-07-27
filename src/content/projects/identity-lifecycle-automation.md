@@ -12,7 +12,7 @@ problem: >
   provisioning, access-change, or offboarding flow that runs the same way
   every time, with a full audit trail.
 architecture: >
-  A queue-triggered Azure Function (Python or PowerShell) picks up one event
+  A queue-triggered Azure Function (Python) picks up one event
   per user, calls Microsoft Graph with a least-privilege managed identity,
   and writes an audit row to a Log Analytics custom table for every action it
   takes. Joiner creates the user, assigns licenses via group-based licensing,

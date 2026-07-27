@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import StatusBadge from "../../components/StatusBadge.astro";
+import { Image } from "astro:assets";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 
 export async function getStaticPaths() {
@@ -16,12 +17,27 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, status, epic, problem, architecture, demo, demoUrl, stack, repoUrl, repoName } =
-  project.data;
+const {
+  title,
+  status,
+  epic,
+  summary,
+  problem,
+  architecture,
+  diagram,
+  diagramAlt,
+  demo,
+  demoUrl,
+  demoGif,
+  demoGifAlt,
+  stack,
+  repoUrl,
+  repoName,
+} = project.data;
 const { Content } = await render(project);
 ---
 
-<BaseLayout title={title} description={project.data.summary}>
+<BaseLayout title={title} description={summary}>
   <article class="section detail">
     <div class="wrap">
       <a class="back-link" href="/projects/">← All projects</a>
@@ -32,7 +48,7 @@ const { Content } = await render(project);
           <span class="chip epic-chip">{epic}</span>
         </div>
         <h1>{title}</h1>
-        <p class="detail-summary">{project.data.summary}</p>
+        <p class="detail-summary">{summary}</p>
       </header>
 
       <div class="detail-body">
@@ -44,11 +60,28 @@ const { Content } = await render(project);
         <section aria-labelledby="architecture-heading">
           <h2 id="architecture-heading">Architecture</h2>
           <p>{architecture}</p>
+          {diagram && (
+            <Image
+              class="detail-image"
+              src={diagram}
+              alt={diagramAlt ?? `${title} architecture diagram`}
+            />
+          )}
         </section>
 
         <section aria-labelledby="demo-heading">
           <h2 id="demo-heading">Demo</h2>
           <p>{demo}</p>
+          {demoGif && (
+            <img
+              class="detail-image"
+              src={demoGif.src}
+              width={demoGif.width}
+              height={demoGif.height}
+              alt={demoGifAlt ?? `${title} demo recording`}
+              loading="lazy"
+            />
+          )}
           {demoUrl && (
             <a class="btn btn-secondary" href={demoUrl} target="_blank" rel="noopener noreferrer">
               Watch demo
@@ -58,7 +91,7 @@ const { Content } = await render(project);
 
         <section aria-labelledby="stack-heading">
           <h2 id="stack-heading">Stack</h2>
-          <ul class="stack-list" aria-label="Technology stack">
+          <ul class="stack-list" role="list" aria-label="Technology stack">
             {stack.map((tech) => (
               <li class="chip">{tech}</li>
             ))}
@@ -139,6 +172,14 @@ const { Content } = await render(project);
   .detail-body p {
     margin: 0;
     color: var(--color-text);
+  }
+
+  .detail-image {
+    margin-top: 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    max-width: 100%;
+    height: auto;
   }
 
   .stack-list {
