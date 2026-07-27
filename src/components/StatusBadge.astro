@@ -1,0 +1,21 @@
+---
+interface Props {
+  status: "shipped" | "in-progress" | "planned";
+}
+
+const { status } = Astro.props;
+
+const LABEL: Record<Props["status"], string> = {
+  shipped: "Shipped",
+  "in-progress": "In Progress",
+  planned: "In Development",
+};
+
+const CLASS: Record<Props["status"], string> = {
+  shipped: "badge-shipped",
+  "in-progress": "badge-in-progress",
+  planned: "badge-planned",
+};
+---
+
+<span class={`badge ${CLASS[status]}`}>{LABEL[status]}</span>

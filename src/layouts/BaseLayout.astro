@@ -1,0 +1,57 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "Kwasi Asare — Senior Systems Engineer. M365, Intune, Entra, Defender, and Purview experience turned into public engineering projects.",
+} = Astro.props;
+
+const pageTitle = title === "Kwasi Asare" ? title : `${title} · Kwasi Asare`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0f6e5c" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#14140f" media="(prefers-color-scheme: dark)" />
+    <script is:inline>
+      // Applied before first paint to avoid a flash of the wrong theme.
+      // Reads a manual override from localStorage if the toggle was used
+      // before; otherwise defers entirely to prefers-color-scheme via CSS.
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored === "light" || stored === "dark") {
+            document.documentElement.setAttribute("data-theme", stored);
+          }
+        } catch (e) {
+          /* localStorage unavailable (privacy mode) — fall back to prefers-color-scheme */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
