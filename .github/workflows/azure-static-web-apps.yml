@@ -1,0 +1,69 @@
+name: Azure Static Web Apps CI/CD
+
+# dev  -> SWA automatically creates/updates a *preview* environment for this
+#         branch (Azure SWA gives every non-production branch its own preview
+#         URL as soon as it's deployed once).
+# master -> deploys to the *production* environment (the branch configured as
+#         the app's production branch when the SWA resource was created).
+#
+# TODO (post-build, needs Azure access — out of scope for this local build):
+#   1. Create the Azure Static Web App resource (free tier), production
+#      branch = master, app linked to this repo.
+#   2. Copy the deployment token SWA gives you into a GitHub Actions secret
+#      named AZURE_STATIC_WEB_APPS_API_TOKEN (repo Settings -> Secrets and
+#      variables -> Actions). The name below is a placeholder until that
+#      secret exists — this workflow will fail on push until it's set.
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - master
+
+jobs:
+  build_and_deploy_job:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    runs-on: ubuntu-latest
+    name: Build and Deploy Job
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+          lfs: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (type-check + astro build)
+        run: npm run build
+
+      - name: Deploy to Azure Static Web Apps
+        id: deploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "/"
+          output_location: "dist"
+          skip_app_build: true
+
+  close_pull_request_job:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Close Pull Request Job
+    steps:
+      - name: Close Pull Request
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: "close"
