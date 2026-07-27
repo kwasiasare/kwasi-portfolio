@@ -1,0 +1,178 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import StatusBadge from "../../components/StatusBadge.astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { title, status, epic, problem, architecture, demo, demoUrl, stack, repoUrl, repoName } =
+  project.data;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={title} description={project.data.summary}>
+  <article class="section detail">
+    <div class="wrap">
+      <a class="back-link" href="/projects/">← All projects</a>
+
+      <header class="detail-head">
+        <div class="detail-badges">
+          <StatusBadge status={status} />
+          <span class="chip epic-chip">{epic}</span>
+        </div>
+        <h1>{title}</h1>
+        <p class="detail-summary">{project.data.summary}</p>
+      </header>
+
+      <div class="detail-body">
+        <section aria-labelledby="problem-heading">
+          <h2 id="problem-heading">Problem</h2>
+          <p>{problem}</p>
+        </section>
+
+        <section aria-labelledby="architecture-heading">
+          <h2 id="architecture-heading">Architecture</h2>
+          <p>{architecture}</p>
+        </section>
+
+        <section aria-labelledby="demo-heading">
+          <h2 id="demo-heading">Demo</h2>
+          <p>{demo}</p>
+          {demoUrl && (
+            <a class="btn btn-secondary" href={demoUrl} target="_blank" rel="noopener noreferrer">
+              Watch demo
+            </a>
+          )}
+        </section>
+
+        <section aria-labelledby="stack-heading">
+          <h2 id="stack-heading">Stack</h2>
+          <ul class="stack-list" aria-label="Technology stack">
+            {stack.map((tech) => (
+              <li class="chip">{tech}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section aria-labelledby="repo-heading">
+          <h2 id="repo-heading">Repository</h2>
+          {repoUrl ? (
+            <a class="btn btn-primary" href={repoUrl} target="_blank" rel="noopener noreferrer">
+              View {repoName} on GitHub
+            </a>
+          ) : (
+            <p class="repo-pending">
+              <code>{repoName}</code> — repository will be linked here once
+              this project ships publicly.
+            </p>
+          )}
+        </section>
+
+        <section class="detail-notes">
+          <Content />
+        </section>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .detail-head {
+    max-width: 46rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .detail-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .epic-chip {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .detail-head h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2rem, 4.5vw, 2.75rem);
+  }
+
+  .detail-summary {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .detail-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 46rem;
+  }
+
+  .detail-body h2 {
+    font-size: 1.25rem;
+    margin: 0 0 0.6rem;
+  }
+
+  .detail-body p {
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .stack-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .repo-pending {
+    color: var(--color-text-muted);
+  }
+
+  .repo-pending code {
+    background: var(--color-bg-inset);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  .detail-notes {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .detail-notes :global(p) {
+    color: var(--color-text-muted);
+  }
+
+  .detail-notes :global(a) {
+    color: var(--color-accent-strong);
+  }
+</style>

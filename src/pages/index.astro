@@ -1,0 +1,177 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+
+const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
+const featured = projects.slice(0, 3);
+
+const credentials = [
+  "PMP",
+  "MBA",
+  "Microsoft 365",
+  "Microsoft Intune",
+  "Microsoft Entra ID",
+  "Microsoft Defender",
+  "Microsoft Purview",
+  "AWS Certified",
+];
+
+const linkedInUrl = "https://www.linkedin.com/in/asare-kwasi";
+---
+
+<BaseLayout title="Kwasi Asare">
+  <section class="section hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Senior Systems Engineer</p>
+        <h1>Kwasi Asare</h1>
+        <p class="hero-lede">
+          15+ years turning Microsoft 365, Intune, Entra, Defender, and
+          Purview operations experience into engineering practice — infrastructure
+          as code, CI/CD, API automation, and observability, backed by an MBA
+          and PMP.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/projects/">See the projects</a>
+          <a class="btn btn-secondary" href={linkedInUrl} target="_blank" rel="noopener noreferrer">
+            LinkedIn
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section about" aria-labelledby="about-heading">
+    <div class="wrap about-grid">
+      <div>
+        <h2 id="about-heading">About</h2>
+        <p>
+          I spent 15+ years running the systems that keep organizations
+          identity-secure and endpoint-compliant — Microsoft 365, Intune,
+          Entra ID, Defender, and Purview in production, day in and day out.
+          This portfolio is that operations depth converted into public,
+          demonstrable engineering evidence: infrastructure as code, CI/CD
+          pipelines, API-driven automation, and the observability to know it's
+          actually working.
+        </p>
+        <p>
+          Six sequenced projects — identity lifecycle automation,
+          configuration-as-code, landing zone infrastructure, a security
+          reporting dashboard, containerization, and this site itself — each
+          shipped as an independent, public repository with its own CI.
+        </p>
+      </div>
+      <div class="card credentials-card">
+        <h2>Certifications &amp; credentials</h2>
+        <ul class="credential-list">
+          {credentials.map((c) => (
+            <li class="chip">{c}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="featured-heading">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="featured-heading">Featured projects</h2>
+        <a class="section-head-link" href="/projects/">All projects →</a>
+      </div>
+      <div class="project-grid">
+        {featured.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-top: clamp(3rem, 8vw, 6rem);
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-accent-strong);
+    margin: 0 0 0.5rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.25rem, 5vw, 3.25rem);
+    margin: 0 0 1rem;
+  }
+
+  .hero-lede {
+    max-width: 46rem;
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    margin: 0 0 1.75rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .about h2,
+  .credentials-card h2 {
+    margin-top: 0;
+  }
+
+  .credentials-card {
+    padding: 1.5rem;
+  }
+
+  .credential-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+
+  .section-head h2 {
+    margin: 0;
+  }
+
+  .section-head-link {
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 800px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
