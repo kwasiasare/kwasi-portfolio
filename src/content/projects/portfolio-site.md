@@ -23,7 +23,7 @@ architecture: >
   pushes deploying to an SWA preview environment and master deploying to
   production, per the standing Azure preference for preview environments
   over separate dev resources.
-demo: "In development — you're looking at the local build. SWA deployment (resource creation, deployment token, first push) is a follow-up step outside this build session."
+demo: "In development — this site is the demo. Azure Static Web Apps deployment is pending; once live, the production URL will be linked here."
 stack:
   - "Astro"
   - "TypeScript"
