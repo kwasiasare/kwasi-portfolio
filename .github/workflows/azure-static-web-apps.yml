@@ -2,9 +2,12 @@ name: Azure Static Web Apps CI/CD
 
 # dev  -> SWA automatically creates/updates a *preview* environment for this
 #         branch (Azure SWA gives every non-production branch its own preview
-#         URL as soon as it's deployed once).
-# master -> deploys to the *production* environment (the branch configured as
-#         the app's production branch when the SWA resource was created).
+#         URL as soon as it's deployed once). Branch preview environments
+#         must be enabled on the SWA resource (portal: Configuration ->
+#         Environments) for this to take effect.
+# master -> deploys to the *production* environment (production_branch below
+#         must match the branch configured as production on the SWA
+#         resource).
 #
 # TODO (post-build, needs Azure access — out of scope for this local build):
 #   1. Create the Azure Static Web App resource (free tier), production
@@ -24,11 +27,46 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: swa-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  pr_validation_job:
+    # Build-only gate that runs for every pull request, including fork PRs
+    # (which don't have access to repo secrets). This gives every PR a
+    # green/red build signal independent of whether the deploy job below can
+    # actually reach Azure.
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    name: Build (PR validation)
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+          lfs: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (type-check + astro build)
+        run: npm run build
+
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -56,11 +94,14 @@ jobs:
           app_location: "/"
           output_location: "dist"
           skip_app_build: true
+          production_branch: "master"
+          deployment_environment: ${{ github.event_name == 'push' && github.ref_name != 'master' && github.ref_name || '' }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close Pull Request Job
+    timeout-minutes: 15
     steps:
       - name: Close Pull Request
         uses: Azure/static-web-apps-deploy@v1
