@@ -91,11 +91,13 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/"
-          output_location: "dist"
+          # This action version treats app_location as the artifact folder
+          # directly when skip_app_build is true (it does not append
+          # output_location in that mode), so app_location must point at the
+          # already-built output rather than the repo root.
+          app_location: "dist"
+          output_location: ""
           skip_app_build: true
-          production_branch: "master"
-          deployment_environment: ${{ github.event_name == 'push' && github.ref_name != 'master' && github.ref_name || '' }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
