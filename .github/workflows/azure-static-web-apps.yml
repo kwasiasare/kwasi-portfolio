@@ -98,6 +98,17 @@ jobs:
           app_location: "dist"
           output_location: ""
           skip_app_build: true
+          # These two inputs are flagged "unexpected" by actions/core's
+          # input-name check for this action.yml (a Docker action), but they
+          # ARE still forwarded to the underlying deploy binary as
+          # INPUT_PRODUCTION_BRANCH / INPUT_DEPLOYMENT_ENVIRONMENT env vars
+          # (Docker actions pass every `with:` key through regardless of
+          # action.yml's declared inputs). Removing them was tested and
+          # caused dev pushes to deploy straight to the production slot
+          # instead of a branch preview environment -- keep them despite the
+          # warning.
+          production_branch: "master"
+          deployment_environment: ${{ github.event_name == 'push' && github.ref_name != 'master' && github.ref_name || '' }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
