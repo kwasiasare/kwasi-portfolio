@@ -1,8 +1,9 @@
 ---
 title: "Azure Landing Zone"
 order: 3
-status: "in-progress"
+status: "shipped"
 epic: "EP-3"
+category: "program"
 summary: "A miniature enterprise landing zone deployed entirely from Bicep — management groups, policy, hub-spoke networking, and an AVD proof of concept."
 problem: >
   Standing up an enterprise-ready Azure environment by hand in the portal
@@ -23,7 +24,7 @@ architecture: >
   deployed on demand and the AVD session host stays deallocated by default to
   control cost, with a budget alert configured. Authentication uses OIDC
   federated credentials to Azure — no stored secrets.
-demo: "Third in the program build order, after Intune-as-Code — built, awaiting publication."
+demo: "Public repository with green CI. Demo recording to be added."
 stack:
   - "Bicep"
   - "Azure Policy"
@@ -31,7 +32,9 @@ stack:
   - "Log Analytics"
   - "GitHub Actions"
   - "OIDC"
+repoUrl: "https://github.com/kwasiasare/azure-landing-zone/tree/dev"
 repoName: "azure-landing-zone"
+repoVisibility: "public"
 ---
 
 Third project in the program build order. A complete Bicep module library

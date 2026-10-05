@@ -213,17 +213,23 @@ the Oryx builder inside the SWA action rebuild it.
 
 ## Status
 
-All six program projects are seeded in `src/content/projects/` with honest
-status badges:
+Program entries (`shipped` = public repo with green CI):
 
 | Project | Status |
 |---|---|
-| Identity Lifecycle Automation (EP-1) | In Progress |
-| Intune-as-Code (EP-2) | In Progress |
-| Azure Landing Zone (EP-3) | In Progress |
-| Security Reporting Dashboard (EP-4) | In Progress |
-| Containerize the Platform (EP-5) | Planned |
+| Identity Lifecycle Automation (EP-1) | Shipped |
+| Intune-as-Code (EP-2) | Shipped |
+| Azure Landing Zone (EP-3) | Shipped |
+| Security Reporting Dashboard (EP-4) | Shipped |
+| Containerize the Platform (EP-5) | In Progress |
 | Portfolio Showcase Website (EP-6, this site) | In Progress |
 
-Update an entry's `status` to `shipped` (and add `repoUrl`/`demoUrl`) as each
-project's own "publish entry" story completes.
+Product and client entries (`shipped` = live for real users):
+
+| Project | Status |
+|---|---|
+| IntuneManager Enterprise | Shipped |
+| Guardian Baseline | In Progress |
+| Workforce Scheduling Platform | Shipped |
+| salloma.com | Shipped |
+| Azure Virtual Desktop Estate + AVD Manager | Draft (not built into the site) |

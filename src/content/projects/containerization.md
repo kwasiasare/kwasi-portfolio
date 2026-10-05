@@ -1,8 +1,9 @@
 ---
 title: "Containerize the Platform"
 order: 5
-status: "planned"
+status: "in-progress"
 epic: "EP-5"
+category: "program"
 summary: "Packaging the Security Reporting Dashboard into a container, shipping it through a registry, and running it on managed container platforms."
 problem: >
   Container fundamentals are best proven on a real app rather than a hello-
@@ -20,7 +21,7 @@ architecture: >
   goal, the same image deploys to a 1-node AKS sandbox via a Helm chart for a
   single evidenced session, then tears down to control cost, with a written
   comparison of the Container Apps vs. AKS decision.
-demo: "In development — fifth in the program build order, after the Security Reporting Dashboard ships."
+demo: "Image pipeline (build, Trivy scan, push to ACR) is green in the endpoint-security-dashboard repo; AKS stretch lives in aks-sandbox."
 stack:
   - "Docker"
   - "Azure Container Registry"
@@ -28,9 +29,13 @@ stack:
   - "AKS"
   - "Helm"
   - "GitHub Actions"
+repoUrl: "https://github.com/kwasiasare/endpoint-security-dashboard/tree/dev"
 repoName: "endpoint-security-dashboard"
+repoVisibility: "public"
 ---
 
 Fifth project in the program build order. Containerizes the P4 dashboard
 rather than starting a new app. See Jira epic
 [EP-5](https://spreadcomgh.atlassian.net/browse/EP-5).
+
+AKS stretch companion: [aks-sandbox](https://github.com/kwasiasare/aks-sandbox/tree/dev).

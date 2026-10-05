@@ -1,8 +1,9 @@
 ---
 title: "Intune-as-Code"
 order: 2
-status: "in-progress"
+status: "shipped"
 epic: "EP-2"
+category: "program"
 summary: "Microsoft Intune configuration managed like software: exported to Git, reviewed via PR, and deployed through a pipeline with drift detection."
 problem: >
   Intune configuration profiles, compliance policies, and Attack Surface
@@ -20,14 +21,16 @@ architecture: >
   workflow that opens a GitHub issue if the live tenant no longer matches the
   repo. Authentication to Microsoft Graph uses an Entra app registration with
   OIDC federated credentials — no client secrets stored anywhere.
-demo: "Built alongside Identity Lifecycle Automation (EP-1), reusing its dev tenant and auth foundation — awaiting publication."
+demo: "Public repository with green CI. Demo recording to be added."
 stack:
   - "Microsoft Graph API"
   - "PowerShell"
   - "GitHub Actions"
   - "Entra ID app registrations"
   - "OIDC"
+repoUrl: "https://github.com/kwasiasare/intune-as-code"
 repoName: "intune-as-code"
+repoVisibility: "public"
 ---
 
 Second project in the program build order. Reuses the dev tenant and OIDC

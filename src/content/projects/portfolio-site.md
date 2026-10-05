@@ -3,6 +3,7 @@ title: "Portfolio Showcase Website"
 order: 6
 status: "in-progress"
 epic: "EP-6"
+category: "program"
 summary: "The site you're looking at — a public front door for the whole program, built with Astro and updated after every project ships."
 problem: >
   Six shipped projects are only evidence if someone can find them. This site
@@ -29,7 +30,9 @@ stack:
   - "TypeScript"
   - "Azure Static Web Apps"
   - "GitHub Actions"
+repoUrl: "https://github.com/kwasiasare/kwasi-portfolio"
 repoName: "kwasi-portfolio"
+repoVisibility: "public"
 ---
 
 Scaffolded right after Identity Lifecycle Automation (EP-1) started, per the

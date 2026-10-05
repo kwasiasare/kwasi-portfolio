@@ -1,8 +1,9 @@
 ---
 title: "Security Reporting Dashboard"
 order: 4
-status: "in-progress"
+status: "shipped"
 epic: "EP-4"
+category: "program"
 summary: "A live security posture dashboard over Intune and Defender data — the reporting layer a security-focused endpoint engineer wishes the portal had."
 problem: >
   Device compliance, Attack Surface Reduction hits, Defender alerts, secure
@@ -22,7 +23,7 @@ architecture: >
   surfacing the audit trail from Identity Lifecycle Automation. The app is
   deployed from a pipeline behind Entra authentication, using managed
   identity to reach Log Analytics.
-demo: "Fourth in the program build order, after Azure Landing Zone — built, awaiting publication."
+demo: "Public repository with green CI. Demo recording to be added."
 stack:
   - "KQL"
   - "Log Analytics"
@@ -30,7 +31,9 @@ stack:
   - "Python"
   - "Azure Functions"
   - "Entra ID"
+repoUrl: "https://github.com/kwasiasare/endpoint-security-dashboard/tree/dev"
 repoName: "endpoint-security-dashboard"
+repoVisibility: "public"
 ---
 
 Fourth project in the program build order. Reuses the Log Analytics workspace

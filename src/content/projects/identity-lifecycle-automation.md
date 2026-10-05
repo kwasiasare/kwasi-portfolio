@@ -1,8 +1,9 @@
 ---
 title: "Identity Lifecycle Automation"
 order: 1
-status: "in-progress"
+status: "shipped"
 epic: "EP-1"
+category: "program"
 summary: "Event-driven joiner/mover/leaver automation for Microsoft Entra and M365, turning manual IAM operations work into engineering evidence."
 problem: >
   Joiner, mover, and leaver processes in most M365 tenants are still manual:
@@ -23,7 +24,7 @@ architecture: >
   idempotent — replaying an event makes no duplicate changes. Infrastructure
   is deployed with Bicep and CI/CD via GitHub Actions, with no client
   secrets: GitHub Actions authenticates to the dev tenant over OIDC.
-demo: "In development — demo recording will be added once the joiner/mover/leaver flows are running end-to-end on the dev tenant."
+demo: "Public repository with green CI. Demo recording to be added once the joiner/mover/leaver flows are captured end-to-end on the dev tenant."
 stack:
   - "Microsoft Graph API"
   - "Azure Functions"
@@ -32,7 +33,10 @@ stack:
   - "GitHub Actions"
   - "Entra ID"
   - "Log Analytics"
+repoUrl: "https://github.com/kwasiasare/identity-lifecycle-automation/tree/dev"
 repoName: "identity-lifecycle-automation"
+repoVisibility: "public"
+# TODO(kwasi): switch repoUrl to the repo root once master is populated (master is currently empty; code is on dev).
 ---
 
 First project in the program build order — establishes the dev tenant, Graph
