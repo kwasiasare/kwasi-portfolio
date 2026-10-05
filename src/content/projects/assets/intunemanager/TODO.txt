@@ -1,5 +1,5 @@
 Screenshots wanted (capture, then add to gallery in ../../<slug>.md):
-01-dashboard.png  main dashboard
-02-catalog.png    Windows/macOS app catalog
-03-deploy.png     one-click deploy / job log
+01-dashboard.png  executive summary: app inventory stats, device health stats, alerts
+02-installed-apps.png  app inventory with live winget version checking, Update All action
+03-deploy.png     packaging pipeline: ready packages, job progress panel, deployment logs
 PNG/JPG, at least 1200px wide. No tenant IDs, emails, or client names visible. Then add gallery: items to the .md referencing ./assets/<slug>/<file>.
