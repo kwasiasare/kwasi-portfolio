@@ -1,11 +1,14 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import StatusBadge from "../../components/StatusBadge.astro";
+import Gallery from "../../components/Gallery.astro";
+import ProjectLinks from "../../components/ProjectLinks.astro";
 import { Image } from "astro:assets";
-import { getCollection, render, type CollectionEntry } from "astro:content";
+import { render, type CollectionEntry } from "astro:content";
+import { getPublishedProjects } from "../../lib/projects";
 
 export async function getStaticPaths() {
-  const projects = await getCollection("projects");
+  const projects = await getPublishedProjects();
   return projects.map((project) => ({
     params: { slug: project.id },
     props: { project },
@@ -33,6 +36,12 @@ const {
   stack,
   repoUrl,
   repoName,
+  repoVisibility,
+  org,
+  gallery,
+  confluenceUrl,
+  confluenceLabel,
+  liveUrl,
 } = project.data;
 const { Content } = await render(project);
 ---
@@ -45,10 +54,19 @@ const { Content } = await render(project);
       <header class="detail-head">
         <div class="detail-badges">
           <StatusBadge status={status} />
-          <span class="chip epic-chip">{epic}</span>
+          {org && <span class="chip">{org}</span>}
+          {epic && <span class="chip epic-chip">{epic}</span>}
         </div>
         <h1>{title}</h1>
         <p class="detail-summary">{summary}</p>
+        <ProjectLinks
+          repoUrl={repoUrl}
+          repoName={repoName}
+          repoVisibility={repoVisibility}
+          confluenceUrl={confluenceUrl}
+          confluenceLabel={confluenceLabel}
+          liveUrl={liveUrl}
+        />
       </header>
 
       <div class="detail-body">
@@ -69,9 +87,17 @@ const { Content } = await render(project);
           )}
         </section>
 
+        {gallery && gallery.length > 0 && (
+          <section aria-labelledby="gallery-heading">
+            <h2 id="gallery-heading">Screenshots</h2>
+            <Gallery items={gallery} title={title} />
+          </section>
+        )}
+
+        {(demo || demoGif || demoUrl) && (
         <section aria-labelledby="demo-heading">
           <h2 id="demo-heading">Demo</h2>
-          <p>{demo}</p>
+          {demo && <p>{demo}</p>}
           {demoGif && (
             <img
               class="detail-image"
@@ -88,6 +114,7 @@ const { Content } = await render(project);
             </a>
           )}
         </section>
+        )}
 
         <section aria-labelledby="stack-heading">
           <h2 id="stack-heading">Stack</h2>
@@ -96,20 +123,6 @@ const { Content } = await render(project);
               <li class="chip">{tech}</li>
             ))}
           </ul>
-        </section>
-
-        <section aria-labelledby="repo-heading">
-          <h2 id="repo-heading">Repository</h2>
-          {repoUrl ? (
-            <a class="btn btn-primary" href={repoUrl} target="_blank" rel="noopener noreferrer">
-              View {repoName} on GitHub
-            </a>
-          ) : (
-            <p class="repo-pending">
-              <code>{repoName}</code> — repository will be linked here once
-              this project ships publicly.
-            </p>
-          )}
         </section>
 
         <section class="detail-notes">
@@ -137,6 +150,7 @@ const { Content } = await render(project);
   .detail-badges {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.6rem;
     margin-bottom: 0.85rem;
   }
@@ -189,17 +203,6 @@ const { Content } = await render(project);
     gap: 0.5rem;
     margin: 0;
     padding: 0;
-  }
-
-  .repo-pending {
-    color: var(--color-text-muted);
-  }
-
-  .repo-pending code {
-    background: var(--color-bg-inset);
-    padding: 0.15rem 0.4rem;
-    border-radius: 4px;
-    font-size: 0.9em;
   }
 
   .detail-notes {

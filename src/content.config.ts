@@ -2,45 +2,59 @@ import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "zod";
 
-// One markdown file per project under src/content/projects/.
-// Adding a shipped project = adding one file here (see README "Add a project").
+// One markdown file per project directly under src/content/projects/.
+// Gallery/diagram images live in src/content/projects/assets/<slug>/ and are
+// referenced with paths relative to the .md file (e.g. ./assets/<slug>/01.png).
+// Pattern is top-level only so nothing under assets/ can ever become an entry.
 const projects = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
+  loader: glob({ pattern: "*.md", base: "./src/content/projects" }),
   schema: ({ image }) =>
     z.object({
-      // Display title, e.g. "Identity Lifecycle Automation"
       title: z.string(),
-      // Sort order on the grid — lower ships first (matches program sequencing)
+      // Sort position within its category (lower first).
       order: z.number(),
-      // Program-level status. "shipped" = live public repo with green CI.
-      // "in-progress" = actively being built right now.
-      // "planned" = scoped and sequenced, not started yet.
+      // program: shipped = public repo with green CI.
+      // product: shipped = in production / live for real users.
       status: z.enum(["shipped", "in-progress", "planned"]),
-      // Jira epic reference, e.g. "EP-1"
-      epic: z.string(),
-      // One or two sentences for the projects grid card.
+      // Grouping on the grid. "product" renders first.
+      category: z.enum(["product", "program"]).default("program"),
+      // Context line, e.g. "Spreadcom LLC" or "Vestmark Inc. (employer)".
+      org: z.string().optional(),
+      // Jira epic for program entries, e.g. "EP-1". Optional for products.
+      epic: z.string().optional(),
+      // true = excluded from every build (dev and prod). Use while a repo
+      // still needs scrubbing before it can be linked publicly.
+      draft: z.boolean().default(false),
       summary: z.string(),
-      // Detail page: problem being solved.
       problem: z.string(),
-      // Detail page: architecture / approach.
       architecture: z.string(),
-      // Detail page: optional architecture diagram, rendered in the
-      // Architecture section. Path is relative to the content file.
       diagram: image().optional(),
       diagramAlt: z.string().optional(),
-      // Detail page: demo status/note. Optional link to a GIF or recording once captured.
-      demo: z.string(),
+      // Demo note; optional now: products use the gallery instead.
+      demo: z.string().optional(),
       demoUrl: z.string().url().optional(),
-      // Detail page: optional demo GIF/screenshot, rendered in the Demo
-      // section. Path is relative to the content file.
       demoGif: image().optional(),
       demoGifAlt: z.string().optional(),
-      // Tech/skills tags shown as chips.
+      // Screenshot gallery. First item doubles as the card thumbnail.
+      gallery: z
+        .array(
+          z.object({
+            image: image(),
+            alt: z.string().min(1),
+            caption: z.string().optional(),
+          }),
+        )
+        .optional(),
       stack: z.array(z.string()),
-      // Public GitHub repo URL once the project repo exists and is public.
+      // Links row
       repoUrl: z.string().url().optional(),
-      // Repo name to display even before repoUrl is live, e.g. "identity-lifecycle-automation"
-      repoName: z.string(),
+      repoName: z.string().optional(),
+      // public: link repoUrl. private: "Private repository — available on request".
+      // pending: "Private repository — public release pending security scan".
+      repoVisibility: z.enum(["public", "private", "pending"]).default("public"),
+      confluenceUrl: z.string().url().optional(),
+      confluenceLabel: z.string().default("Confluence docs"),
+      liveUrl: z.string().url().optional(),
     }),
 });
 

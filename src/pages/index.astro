@@ -1,18 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
-import { getCollection } from "astro:content";
+import { getPublishedProjects } from "../lib/projects";
 import { LINKEDIN_URL } from "../consts";
 
-const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
-
-// Featured projects: in-progress work leads (it's the most relevant signal
-// of active effort), falling back to program sequencing (`order`).
-const featureRank = (status: (typeof projects)[number]["data"]["status"]) =>
-  status === "in-progress" ? 0 : 1;
-const featured = [...projects]
-  .sort((a, b) => featureRank(a.data.status) - featureRank(b.data.status) || a.data.order - b.data.order)
-  .slice(0, 3);
+const projects = await getPublishedProjects();
+// Products first (see lib/projects.ts), then by `order`.
+const featured = projects.slice(0, 3);
 
 const credentials = [
   "PMP",
@@ -62,11 +56,12 @@ const credentials = [
           actually working.
         </p>
         <p>
-          Six sequenced projects — identity lifecycle automation,
+          Two kinds of work live here: products and client systems built under
+          Spreadcom LLC (and one employer estate), and a six-project
+          Engineering Portfolio program — identity lifecycle automation,
           configuration-as-code, landing zone infrastructure, a security
-          reporting dashboard, containerization, and this site itself —
-          each shipping as an independent, public repository with its own
-          CI.
+          reporting dashboard, containerization, and this site — each an
+          independent public repository with its own CI.
         </p>
       </div>
       <div class="card credentials-card">
@@ -77,6 +72,25 @@ const credentials = [
           ))}
         </ul>
       </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="ai-heading">
+    <div class="wrap">
+      <h2 id="ai-heading">How I build with AI</h2>
+      <p class="ai-lede">
+        Every project here is built with Claude Code as the primary engineering
+        tool, inside a process designed so that the human stays accountable for
+        what ships.
+      </p>
+      <ul class="practice-list" role="list">
+        <li><strong>Multi-model orchestration.</strong> Claude Code sessions use different Claude models for planning, implementation, and review, with handoffs captured in writing.</li>
+        <li><strong>dev → preview → approve → production.</strong> Work lands on a dev branch, deploys to a preview environment, and is promoted to production only after review.</li>
+        <li><strong>Six-persona peer review before every push.</strong> Each change is reviewed from product, architecture, engineering, UX, QA/DevOps, and security perspectives before it is pushed.</li>
+        <li><strong>CI to green.</strong> Pipelines run type checks, tests, and builds; nothing merges red.</li>
+        <li><strong>Human approval for production and infrastructure changes.</strong> Deployments and infrastructure-as-code changes require explicit sign-off.</li>
+        <li><strong>Jira + Confluence tracking.</strong> Epics and stories in Jira, decisions and runbooks in Confluence, linked from each project page where available.</li>
+      </ul>
     </div>
   </section>
 
@@ -154,6 +168,36 @@ const credentials = [
     gap: 0.5rem;
     margin: 0;
     padding: 0;
+  }
+
+  .ai-lede {
+    max-width: 46rem;
+    color: var(--color-text-muted);
+    margin: 0 0 1.5rem;
+  }
+
+  .practice-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1rem;
+  }
+
+  .practice-list li {
+    background: var(--color-bg-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.15rem;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .practice-list strong {
+    color: var(--color-text);
+    display: block;
+    margin-bottom: 0.25rem;
   }
 
   .section-head {

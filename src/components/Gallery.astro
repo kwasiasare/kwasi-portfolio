@@ -1,0 +1,79 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  items: NonNullable<CollectionEntry<"projects">["data"]["gallery"]>;
+  title: string;
+}
+
+const { items, title } = Astro.props;
+---
+
+<ul class="gallery" role="list" aria-label={`${title} screenshots`}>
+  {items.map((item, i) => (
+    <li>
+      <figure>
+        <a class="gallery-link" href={item.image.src} target="_blank" rel="noopener noreferrer">
+          <Image
+            src={item.image}
+            alt={item.alt}
+            widths={[400, 800, 1200]}
+            sizes="(max-width: 640px) 100vw, (max-width: 1080px) 50vw, 360px"
+            loading={i === 0 ? "eager" : "lazy"}
+            decoding="async"
+          />
+          <span class="visually-hidden">(opens full-size image in a new tab)</span>
+        </a>
+        {item.caption && <figcaption>{item.caption}</figcaption>}
+      </figure>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .gallery {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  .gallery-link {
+    display: block;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-inset);
+  }
+
+  .gallery-link :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+
+  figcaption {
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .gallery-link :global(img) {
+      transition: transform 0.2s ease;
+    }
+
+    .gallery-link:hover :global(img) {
+      transform: scale(1.03);
+    }
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
 import StatusBadge from "./StatusBadge.astro";
 
 interface Props {
@@ -7,13 +8,25 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, summary, status, stack, epic } = project.data;
+const { title, summary, status, stack, epic, org, gallery } = project.data;
+const thumb = gallery?.[0];
 ---
 
 <article class="card project-card">
+  {thumb && (
+    <Image
+      class="project-thumb"
+      src={thumb.image}
+      alt=""
+      widths={[400, 800]}
+      sizes="(max-width: 640px) 100vw, 340px"
+      loading="lazy"
+      decoding="async"
+    />
+  )}
   <div class="project-card-head">
     <StatusBadge status={status} />
-    <span class="chip epic-chip">{epic}</span>
+    {org ? <span class="chip">{org}</span> : epic ? <span class="chip epic-chip">{epic}</span> : null}
   </div>
   <h3>
     <a class="project-card-link" href={`/projects/${project.id}/`}>{title}</a>
@@ -48,10 +61,23 @@ const { title, summary, status, stack, epic } = project.data;
     }
   }
 
+  .project-thumb {
+    width: calc(100% + 3rem);
+    max-width: none;
+    margin: -1.5rem -1.5rem 0;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
   .project-card-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   .epic-chip {
