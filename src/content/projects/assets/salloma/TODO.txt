@@ -1,0 +1,3 @@
+Fulfilled: 01-home, 02-course, 03-lesson.
+Still wanted: 04-ai-tutor.png  AI tutor / chatbot open on a lesson
+PNG/JPG, at least 1200px wide. No tenant IDs, emails, or client names visible. Then add gallery: items to the .md referencing ./assets/<slug>/<file>.

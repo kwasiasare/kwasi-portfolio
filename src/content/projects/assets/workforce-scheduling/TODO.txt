@@ -1,0 +1,6 @@
+Screenshots wanted (anonymise all names):
+01-shift-board.png   shift board
+02-assignment.png    eligibility-ranked assignment
+03-timesheet.png     timesheet approval
+04-mobile.png        mobile app clock-in
+PNG/JPG, at least 1200px wide. No tenant IDs, emails, or client names visible. Then add gallery: items to the .md referencing ./assets/<slug>/<file>.
