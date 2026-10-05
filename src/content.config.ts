@@ -18,7 +18,7 @@ const projects = defineCollection({
       status: z.enum(["shipped", "in-progress", "planned"]),
       // Grouping on the grid. "product" renders first.
       category: z.enum(["product", "program"]).default("program"),
-      // Context line, e.g. "Spreadcom LLC" or "Vestmark Inc. (employer)".
+      // Context line, e.g. "Spreadcom LLC" or "Example Corp (employer)".
       org: z.string().optional(),
       // Jira epic for program entries, e.g. "EP-1". Optional for products.
       epic: z.string().optional(),
@@ -32,7 +32,7 @@ const projects = defineCollection({
       diagramAlt: z.string().optional(),
       // Demo note; optional now: products use the gallery instead.
       demo: z.string().optional(),
-      demoUrl: z.string().url().optional(),
+      demoUrl: z.url().optional(),
       demoGif: image().optional(),
       demoGifAlt: z.string().optional(),
       // Screenshot gallery. First item doubles as the card thumbnail.
@@ -47,14 +47,20 @@ const projects = defineCollection({
         .optional(),
       stack: z.array(z.string()),
       // Links row
-      repoUrl: z.string().url().optional(),
+      repoUrl: z.url().optional(),
       repoName: z.string().optional(),
       // public: link repoUrl. private: "Private repository — available on request".
       // pending: "Private repository — public release pending security scan".
       repoVisibility: z.enum(["public", "private", "pending"]).default("public"),
-      confluenceUrl: z.string().url().optional(),
+      confluenceUrl: z.url().optional(),
       confluenceLabel: z.string().default("Confluence docs"),
-      liveUrl: z.string().url().optional(),
+      liveUrl: z.url().optional(),
+    })
+    // Privacy guard: a private/pending entry must never carry a repo URL, so
+    // one can't leak into the page even if the links component changes.
+    .refine((d) => d.repoVisibility === "public" || !d.repoUrl, {
+      message: 'repoUrl is only allowed when repoVisibility is "public"',
+      path: ["repoUrl"],
     }),
 });
 
