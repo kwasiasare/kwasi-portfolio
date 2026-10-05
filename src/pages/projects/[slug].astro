@@ -1,0 +1,227 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import StatusBadge from "../../components/StatusBadge.astro";
+import Gallery from "../../components/Gallery.astro";
+import ProjectLinks from "../../components/ProjectLinks.astro";
+import { Image } from "astro:assets";
+import { render, type CollectionEntry } from "astro:content";
+import { getPublishedProjects } from "../../lib/projects";
+
+export async function getStaticPaths() {
+  const projects = await getPublishedProjects();
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const {
+  title,
+  status,
+  epic,
+  summary,
+  problem,
+  architecture,
+  diagram,
+  diagramAlt,
+  demo,
+  demoUrl,
+  demoGif,
+  demoGifAlt,
+  stack,
+  repoUrl,
+  repoName,
+  repoVisibility,
+  org,
+  gallery,
+  confluenceUrl,
+  confluenceLabel,
+  liveUrl,
+} = project.data;
+const { Content } = await render(project);
+// Entries without a Markdown body (e.g. gallery-only products) must not render
+// an empty bordered notes section.
+const hasNotes = Boolean(project.body?.trim());
+---
+
+<BaseLayout title={title} description={summary}>
+  <article class="section detail">
+    <div class="wrap">
+      <a class="back-link" href="/projects/">← All projects</a>
+
+      <header class="detail-head">
+        <div class="detail-badges">
+          <StatusBadge status={status} />
+          {org && <span class="chip">{org}</span>}
+          {epic && <span class="chip epic-chip">{epic}</span>}
+        </div>
+        <h1>{title}</h1>
+        <p class="detail-summary">{summary}</p>
+        <ProjectLinks
+          repoUrl={repoUrl}
+          repoName={repoName}
+          repoVisibility={repoVisibility}
+          confluenceUrl={confluenceUrl}
+          confluenceLabel={confluenceLabel}
+          liveUrl={liveUrl}
+        />
+      </header>
+
+      <div class="detail-body">
+        <section aria-labelledby="problem-heading">
+          <h2 id="problem-heading">Problem</h2>
+          <p>{problem}</p>
+        </section>
+
+        <section aria-labelledby="architecture-heading">
+          <h2 id="architecture-heading">Architecture</h2>
+          <p>{architecture}</p>
+          {diagram && (
+            <Image
+              class="detail-image"
+              src={diagram}
+              alt={diagramAlt ?? `${title} architecture diagram`}
+            />
+          )}
+        </section>
+
+        {gallery && gallery.length > 0 && (
+          <section aria-labelledby="gallery-heading">
+            <h2 id="gallery-heading">Screenshots</h2>
+            <Gallery items={gallery} title={title} />
+          </section>
+        )}
+
+        {(demo || demoGif || demoUrl) && (
+          <section aria-labelledby="demo-heading">
+            <h2 id="demo-heading">Demo</h2>
+            {demo && <p>{demo}</p>}
+            {demoGif && (
+              <img
+                class="detail-image"
+                src={demoGif.src}
+                width={demoGif.width}
+                height={demoGif.height}
+                alt={demoGifAlt ?? `${title} demo recording`}
+                loading="lazy"
+              />
+            )}
+            {demoUrl && (
+              <a class="btn btn-secondary" href={demoUrl} target="_blank" rel="noopener noreferrer">
+                Watch demo
+              </a>
+            )}
+          </section>
+        )}
+
+        <section aria-labelledby="stack-heading">
+          <h2 id="stack-heading">Stack</h2>
+          <ul class="stack-list" role="list" aria-label="Technology stack">
+            {stack.map((tech) => (
+              <li class="chip">{tech}</li>
+            ))}
+          </ul>
+        </section>
+
+        {hasNotes && (
+          <section class="detail-notes">
+            <Content />
+          </section>
+        )}
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .detail-head {
+    max-width: 46rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .detail-badges {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .epic-chip {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .detail-head h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2rem, 4.5vw, 2.75rem);
+  }
+
+  .detail-summary {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .detail-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 46rem;
+  }
+
+  .detail-body h2 {
+    font-size: 1.25rem;
+    margin: 0 0 0.6rem;
+  }
+
+  .detail-body p {
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .detail-image {
+    margin-top: 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    max-width: 100%;
+    height: auto;
+  }
+
+  .stack-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .detail-notes {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .detail-notes :global(p) {
+    color: var(--color-text-muted);
+  }
+
+  .detail-notes :global(a) {
+    color: var(--color-accent-strong);
+  }
+</style>
