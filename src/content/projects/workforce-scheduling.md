@@ -1,6 +1,6 @@
 ---
 title: "Workforce Scheduling Platform"
-order: 3
+order: 4
 status: "shipped"
 category: "product"
 org: "Spreadcom LLC — client work"
