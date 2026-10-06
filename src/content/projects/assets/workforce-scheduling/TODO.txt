@@ -1,4 +1,6 @@
-Done: 01-shift-board.png, 02-live.png, 03-request-form.png (captured 2026-10-06 from the release-2 preview, fictional sample data).
+Done: 01-shift-board.png, 02-live.png, 03-request-form.png (captured 2026-10-06 from the release-2 preview demo tenant).
+Client names and site addresses in 01 and 03 were pixelated at review (2026-10-06): the demo tenant's client list names real organisations.
+Re-capture only after the demo tenant is reseeded with invented client names.
 Still wanted once the ShiftBoard rebrand is deployed:
 04-mobile.png        staff phone view (current capture still shows the old brand in the phone frame)
 Do not use the Staff or Users pages: they show phone numbers.
