@@ -129,6 +129,14 @@ entries, only use `shipped` once the repo is public with green CI. For
 
 ## Deployment (Azure Static Web Apps)
 
+**Where it runs (moved 2026-10-07):** Static Web App `swa-kwasi-portfolio`
+(Free tier, East US 2) in resource group `rg-portfolio`, subscription
+"Azure subscription 1", Spreadcom tenant. Production:
+https://lemon-wave-089b0760f.4.azurestaticapps.net. The `dev` preview is
+https://lemon-wave-089b0760f-dev.eastus2.4.azurestaticapps.net. The repo
+secret `AZURE_STATIC_WEB_APPS_API_TOKEN` holds this app's deployment token.
+
+
 Cloud resource creation is a follow-up step outside this repository's code:
 
 1. **Create the SWA resource** (free tier) in the Azure Portal or via
