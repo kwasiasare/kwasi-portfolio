@@ -74,7 +74,6 @@ public/
    status: "shipped"         # "shipped" | "in-progress" | "planned"
    category: "product"       # only "product" today (default)
    org: "Spreadcom LLC"      # optional context chip (products)
-   epic: "EP-2"              # optional Jira epic chip
    draft: false              # true = excluded from every build, no page at all
    summary: "One or two sentences for the grid card."
    problem: "What problem this solves, 2-4 sentences."
@@ -178,7 +177,7 @@ the Oryx builder inside the SWA action rebuild it.
 - **No external CDNs / fonts.** The font stack is the OS system font
   (`-apple-system, "Segoe UI", Roboto, ...`); the only icons are inline SVG
   in `ThemeToggle.astro` and the favicon. Nothing calls out to a third-party
-  host, per program constraints.
+  host, per the site brief.
 - **Theme:** default follows `prefers-color-scheme`; the toggle button
   writes an explicit `light`/`dark` override to `localStorage`, applied by a
   small inline script in `<head>` (before first paint, to avoid a flash of
@@ -192,7 +191,7 @@ the Oryx builder inside the SWA action rebuild it.
   instead of shipping a broken page.
 - **Personal details kept minimal.** Only name, title, certification areas,
   and a LinkedIn link appear anywhere on the site — no phone number or email
-  address, per program scope.
+  address, per the site brief.
 - **Content-Security-Policy allows `script-src 'unsafe-inline'`.** The only
   inline script on the site is the theme-bootstrap snippet in
   `BaseLayout.astro` (it must run before first paint, inline, to avoid a

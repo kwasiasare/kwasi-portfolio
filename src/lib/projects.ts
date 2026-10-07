@@ -6,8 +6,8 @@ export type Category = Project["data"]["category"];
 export const CATEGORIES: { key: Category; label: string; blurb: string }[] = [
   {
     key: "product",
-    label: "Products & client work",
-    blurb: "Software built and operated for Spreadcom LLC and its clients.",
+    label: "Products",
+    blurb: "Software built and operated under Spreadcom LLC.",
   },
 ];
 

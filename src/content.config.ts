@@ -20,7 +20,7 @@ const projects = defineCollection({
       category: z.enum(["product"]).default("product"),
       // Context line, e.g. "Spreadcom LLC" or "Example Corp (employer)".
       org: z.string().optional(),
-      // Optional Jira epic chip, e.g. "EP-1".
+      // Optional Jira epic key shown as a chip when no org is set.
       epic: z.string().optional(),
       // true = excluded from every build (dev and prod). Use while a repo
       // still needs scrubbing before it can be linked publicly.
