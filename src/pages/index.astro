@@ -5,7 +5,7 @@ import { getPublishedProjects } from "../lib/projects";
 import { LINKEDIN_URL } from "../consts";
 
 const projects = await getPublishedProjects();
-// Products first (see lib/projects.ts), then by `order`.
+// Sorted by `order` (see lib/projects.ts).
 const featured = projects.slice(0, 3);
 
 const credentials = [
@@ -56,12 +56,10 @@ const credentials = [
           actually working.
         </p>
         <p>
-          Two kinds of work live here: products and client systems built under
-          Spreadcom LLC, and a six-project
-          Engineering Portfolio program — identity lifecycle automation,
-          configuration-as-code, landing zone infrastructure, a security
-          reporting dashboard, containerization, and this site — each an
-          independent public repository with its own CI.
+          What lives here are the products I build under Spreadcom LLC — a
+          training platform, a workforce scheduling platform, and tools for
+          endpoint management, Azure Virtual Desktop operations, store
+          operations, and managed security baselines.
         </p>
       </div>
       <div class="card credentials-card">

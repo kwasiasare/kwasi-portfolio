@@ -1,0 +1,4 @@
+Screenshots wanted:
+01-dashboard.png        dashboard
+02-approvals-inbox.png  approvals inbox
+PNG/JPG, at least 1200px wide. No order/customer data, ad account IDs, store admin handles. Then add gallery: items to the .md referencing ./assets/<slug>/<file>.

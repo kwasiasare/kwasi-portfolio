@@ -1,6 +1,6 @@
 ---
 title: "ShiftBoard — Workforce Scheduling Platform"
-order: 4
+order: 2
 status: "shipped"
 category: "product"
 org: "Spreadcom LLC"
@@ -9,10 +9,7 @@ problem: "Staffing requests arrive by web, SMS, email, and phone and are matched
 architecture: "Shift board; request intake over web, SMS, email, and mobile; assignment eligibility and ranking; geofenced clock-in with location monitoring, exit alerts, and auto-close; timesheets with approval and CSV export; mobile app for staff and client contacts; push, SMS, and email notifications; RBAC with roles-as-data; OTP sign-in; consent and retention controls; audit trail. API on Azure Container Apps, web on Azure Static Web Apps."
 stack: ["Azure Container Apps", "Azure Static Web Apps", "Mobile app", "Geofencing", "SMS", "Push notifications", "RBAC", "OTP sign-in"]
 repoVisibility: "private"
-liveUrl: "https://blue-tree-0762a730f-2.eastus2.6.azurestaticapps.net/"
-# Release-2 preview environment (PR #2). SWA preview environments are removed
-# when the PR closes, so switch liveUrl to the production hostname as part of
-# the release-2 merge, not after it.
+liveUrl: "https://blue-tree-0762a730f.6.azurestaticapps.net/"
 gallery:
   - image: "./assets/workforce-scheduling/01-shift-board.png"
     alt: "Shift board with request columns from received through converted, with fill-by deadline badges"
@@ -29,7 +26,7 @@ Source is in a private repository and available on request. The live demo runs o
 
 ## Try it
 
-1. Open the [live demo](https://blue-tree-0762a730f-2.eastus2.6.azurestaticapps.net/).
+1. Open the [live demo](https://blue-tree-0762a730f.6.azurestaticapps.net/).
 2. Enter the demo phone number **617 555 0142** and select **Send code**.
 3. The demo has no SMS sender, so the 6-digit code appears on screen. Enter it and select **Sign in**.
 

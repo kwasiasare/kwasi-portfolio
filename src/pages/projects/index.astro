@@ -7,16 +7,15 @@ const projects = await getPublishedProjects();
 const groups = groupByCategory(projects);
 ---
 
-<BaseLayout title="Projects" description="Products and client systems built under Spreadcom LLC, plus the six-project Engineering Portfolio program — each with an honest status badge and links to source and docs.">
+<BaseLayout title="Projects" description="Six products built under Spreadcom LLC, each with an honest status badge and links to source and docs.">
   <section class="section">
     <div class="wrap">
       <p class="eyebrow">Portfolio</p>
       <h1>Projects</h1>
       <p class="intro">
-        Products and client systems I have built and operate, followed by the
-        six-project Engineering Portfolio program. Status badges are honest:
-        a product is shipped only when it is live for real users; a program
-        project only when its repo is public with green CI.
+        Six products built under Spreadcom LLC. Status badges are honest: a
+        product is shipped only when it is live for real users; everything
+        else is marked in progress.
       </p>
       {projects.length === 0 ? (
         <p class="empty-state">No projects published yet — check back soon.</p>

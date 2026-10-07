@@ -1,7 +1,7 @@
 ---
 title: "IntuneManager"
-order: 2
-status: "shipped"
+order: 3
+status: "in-progress"
 category: "product"
 org: "Spreadcom LLC"
 summary: "Per-tenant Electron desktop app for Windows endpoint management through Microsoft Intune: device health, installed-app version drift against winget, and AI-assisted Win32 packaging and deployment."

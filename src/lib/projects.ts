@@ -9,17 +9,11 @@ export const CATEGORIES: { key: Category; label: string; blurb: string }[] = [
     label: "Products & client work",
     blurb: "Software built and operated for Spreadcom LLC and its clients.",
   },
-  {
-    key: "program",
-    label: "Engineering Portfolio program",
-    blurb:
-      "Six sequenced projects tracked as Jira epics EP-1 to EP-6, each an independent public repository with its own CI.",
-  },
 ];
 
 const catRank = (c: Category) => CATEGORIES.findIndex((x) => x.key === c);
 
-/** All non-draft projects, products first, then by `order`. */
+/** All non-draft projects, by category then `order`. */
 export async function getPublishedProjects(): Promise<Project[]> {
   const all = await getCollection("projects", ({ data }) => !data.draft);
   return all.sort(
