@@ -221,6 +221,23 @@ const hasNotes = Boolean(project.body?.trim());
     color: var(--color-text-muted);
   }
 
+  /* Markdown bodies are not scoped, so match the sibling section headings
+     and keep lists inside the column. */
+  .detail-notes :global(h2) {
+    font-size: 1.25rem;
+    margin: 1.5rem 0 0.6rem;
+  }
+
+  .detail-notes :global(ol),
+  .detail-notes :global(ul) {
+    margin: 0 0 1rem;
+    padding-left: 1.5rem;
+  }
+
+  .detail-notes :global(li) {
+    margin-bottom: 0.35rem;
+  }
+
   .detail-notes :global(a) {
     color: var(--color-accent-strong);
   }

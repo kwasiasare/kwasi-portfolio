@@ -1,18 +1,9 @@
 # kwasi-portfolio
 
 Public portfolio site for Kwasi Asare — Senior Systems Engineer. A
-professional summary, a projects grid in two groups (products and client
-work, then the Engineering Portfolio program), and a detail page per project
-(problem → architecture → screenshots → demo → stack → links).
-
-> This site is developed as one project (EP-6) within a larger six-project
-> program plan. The full program plan lives outside this repository; in
-> short, six sequenced projects — identity lifecycle automation,
-> configuration-as-code, landing zone infrastructure, a security reporting
-> dashboard, containerization, and this site — are each shipping as an
-> independent, public GitHub repository with its own CI, tracked as Jira
-> epics EP-1 through EP-6. Products and client systems built under Spreadcom
-> LLC are listed alongside, in their own group.
+professional summary, a grid of six products built under Spreadcom LLC, and
+a detail page per project (problem → architecture → screenshots → demo →
+stack → links).
 
 Built with [Astro](https://astro.build) content collections, static output,
 no external CDNs (all fonts/assets are local system fonts and inline SVG).
@@ -73,17 +64,16 @@ public/
 ## Add a project entry (under 30 minutes)
 
 1. Create `src/content/projects/<slug>.md` (the filename becomes the URL
-   slug, e.g. `intune-as-code.md` → `/projects/intune-as-code/`).
+   slug, e.g. `shop-manager.md` → `/projects/shop-manager/`).
 2. Fill in frontmatter per the schema in `src/content.config.ts`:
 
    ```yaml
    ---
    title: "Project Name"
-   order: 2                  # sort position within its category
+   order: 2                  # sort position on the grid
    status: "shipped"         # "shipped" | "in-progress" | "planned"
-   category: "product"       # "product" (renders first) | "program" (default)
+   category: "product"       # only "product" today (default)
    org: "Spreadcom LLC"      # optional context chip (products)
-   epic: "EP-2"              # optional Jira epic (program entries)
    draft: false              # true = excluded from every build, no page at all
    summary: "One or two sentences for the grid card."
    problem: "What problem this solves, 2-4 sentences."
@@ -123,11 +113,18 @@ public/
    publish a new project.
 
 **Status badges are honest by design.** `planned` renders as "Planned",
-`in-progress` as "In Progress", and `shipped` as "Shipped". For `program`
-entries, only use `shipped` once the repo is public with green CI. For
-`product` entries, `shipped` means in production and live for real users.
+`in-progress` as "In Progress", and `shipped` as "Shipped". `shipped` means
+in production and live for real users.
 
 ## Deployment (Azure Static Web Apps)
+
+**Where it runs (moved 2026-10-07):** Static Web App `swa-kwasi-portfolio`
+(Free tier, East US 2) in resource group `rg-portfolio`, subscription
+"Azure subscription 1", Spreadcom tenant. Production:
+https://lemon-wave-089b0760f.4.azurestaticapps.net. The `dev` preview is
+https://lemon-wave-089b0760f-dev.eastus2.4.azurestaticapps.net. The repo
+secret `AZURE_STATIC_WEB_APPS_API_TOKEN` holds this app's deployment token.
+
 
 Cloud resource creation is a follow-up step outside this repository's code:
 
@@ -180,7 +177,7 @@ the Oryx builder inside the SWA action rebuild it.
 - **No external CDNs / fonts.** The font stack is the OS system font
   (`-apple-system, "Segoe UI", Roboto, ...`); the only icons are inline SVG
   in `ThemeToggle.astro` and the favicon. Nothing calls out to a third-party
-  host, per program constraints.
+  host, per the site brief.
 - **Theme:** default follows `prefers-color-scheme`; the toggle button
   writes an explicit `light`/`dark` override to `localStorage`, applied by a
   small inline script in `<head>` (before first paint, to avoid a flash of
@@ -194,7 +191,7 @@ the Oryx builder inside the SWA action rebuild it.
   instead of shipping a broken page.
 - **Personal details kept minimal.** Only name, title, certification areas,
   and a LinkedIn link appear anywhere on the site — no phone number or email
-  address, per program scope.
+  address, per the site brief.
 - **Content-Security-Policy allows `script-src 'unsafe-inline'`.** The only
   inline script on the site is the theme-bootstrap snippet in
   `BaseLayout.astro` (it must run before first paint, inline, to avoid a
@@ -213,23 +210,13 @@ the Oryx builder inside the SWA action rebuild it.
 
 ## Status
 
-Program entries (`shipped` = public repo with green CI):
+Six products built under Spreadcom LLC (`shipped` = live for real users):
 
-| Project | Status |
-|---|---|
-| Identity Lifecycle Automation (EP-1) | Shipped |
-| Intune-as-Code (EP-2) | Shipped |
-| Azure Landing Zone (EP-3) | Shipped |
-| Security Reporting Dashboard (EP-4) | Shipped |
-| Containerize the Platform (EP-5) | In Progress |
-| Portfolio Showcase Website (EP-6, this site) | In Progress |
-
-Product and client entries (`shipped` = live for real users):
-
-| Project | Status |
-|---|---|
-| IntuneManager Enterprise | Shipped |
-| Guardian Baseline | In Progress |
-| Workforce Scheduling Platform | Shipped |
-| salloma.com | Shipped |
-| Azure Virtual Desktop Estate + AVD Manager | Draft (not built into the site) |
+| Order | Project | Status |
+|---|---|---|
+| 1 | salloma.com | Shipped |
+| 2 | ShiftBoard (Workforce Scheduling Platform) | Shipped |
+| 3 | IntuneManager | In Progress |
+| 4 | AVD Manager | In Progress |
+| 5 | Shop Manager | In Progress |
+| 6 | Guardian Baseline | In Progress |

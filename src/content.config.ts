@@ -11,16 +11,16 @@ const projects = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      // Sort position within its category (lower first).
+      // Sort position on the grid (lower first).
       order: z.number(),
-      // program: shipped = public repo with green CI.
-      // product: shipped = in production / live for real users.
+      // shipped = in production / live for real users.
       status: z.enum(["shipped", "in-progress", "planned"]),
-      // Grouping on the grid. "product" renders first.
-      category: z.enum(["product", "program"]).default("program"),
+      // Grouping on the grid. Only "product" exists today; kept as a field so
+      // another group can be added later without a schema migration.
+      category: z.enum(["product"]).default("product"),
       // Context line, e.g. "Spreadcom LLC" or "Example Corp (employer)".
       org: z.string().optional(),
-      // Jira epic for program entries, e.g. "EP-1". Optional for products.
+      // Optional Jira epic key shown as a chip when no org is set.
       epic: z.string().optional(),
       // true = excluded from every build (dev and prod). Use while a repo
       // still needs scrubbing before it can be linked publicly.

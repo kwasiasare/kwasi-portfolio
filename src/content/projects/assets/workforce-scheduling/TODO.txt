@@ -1,6 +1,7 @@
-Screenshots wanted (anonymise all names):
-01-shift-board.png   shift board
-02-assignment.png    eligibility-ranked assignment
-03-timesheet.png     timesheet approval
-04-mobile.png        mobile app clock-in
-PNG/JPG, at least 1200px wide. No tenant IDs, emails, or client names visible. Then add gallery: items to the .md referencing ./assets/<slug>/<file>.
+Done: 01-shift-board.png, 02-live.png, 03-request-form.png (captured 2026-10-06 from the release-2 preview demo tenant).
+Client names and site addresses in 01 and 03 were pixelated at review (2026-10-06): the demo tenant's client list names real organisations.
+Re-capture only after the demo tenant is reseeded with invented client names.
+Still wanted once the ShiftBoard rebrand is deployed:
+04-mobile.png        staff phone view (current capture still shows the old brand in the phone frame)
+Do not use the Staff or Users pages: they show phone numbers.
+PNG/JPG, at least 1200px wide. Then add gallery: items to the .md referencing ./assets/<slug>/<file>.

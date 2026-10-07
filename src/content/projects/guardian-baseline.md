@@ -1,6 +1,6 @@
 ---
 title: "Guardian Baseline"
-order: 3
+order: 6
 status: "in-progress"
 category: "product"
 org: "Spreadcom LLC"
