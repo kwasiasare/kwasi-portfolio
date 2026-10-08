@@ -6,7 +6,7 @@ category: "product"
 org: "Spreadcom LLC"
 summary: "Operations console for Azure Virtual Desktop, with a public, no-sign-in demo on a fictional Contoso estate."
 problem: "Day-to-day Azure Virtual Desktop operations are spread across many Azure Portal blades. The app puts host pools, sessions, images, scaling, cost, profiles, governance checks and audit in one place for the people who run the estate."
-architecture: "A React 18 and Fluent UI v9 single-page app on Azure Static Web Apps with Microsoft Entra sign-in. The API runs on Azure Functions v4 (Node 22, Flex Consumption) with a managed identity and no secrets, and uses the Azure SDKs for Desktop Virtualization, Compute, Cost Management, Network, Storage and Monitor / Log Analytics (KQL). Bicep defines about 17 least-privilege custom role definitions. Viewer, operator and admin roles are mapped from Entra groups and enforced in the API. Every change is written to an append-only audit with the operator's reason."
+architecture: "A React 18 and Fluent UI v9 single-page app on Azure Static Web Apps with Microsoft Entra sign-in. The API runs on Azure Functions v4 (Node 22, Flex Consumption) with a managed identity and no secrets, and uses the Azure SDKs for Desktop Virtualization, Compute, Cost Management, Network, Storage and Monitor / Log Analytics (KQL). Bicep defines 11 least-privilege custom role definitions. Viewer, operator and admin roles are mapped from Entra groups and enforced in the API. Every change is written to an append-only audit with the operator's reason."
 gallery:
   - image: "./assets/avd-manager/01-dashboard.png"
     alt: "AVD Manager dashboard showing sessions, scaling phase, image version, cost and alerts for the Contoso demo estate"
@@ -18,8 +18,8 @@ gallery:
     alt: "Sessions page listing user sessions with message and log-off actions"
     caption: "Sessions: user sessions with message and log-off actions (fictional Contoso demo)"
   - image: "./assets/avd-manager/04-cost.png"
-    alt: "Cost page showing month-to-date spend and projection by resource group"
-    caption: "Cost: month-to-date spend and projection by resource group (fictional Contoso demo)"
+    alt: "Cost page showing month-to-date spend, projected month-end and spend by resource group"
+    caption: "Cost: month-to-date spend, projected month-end and spend by resource group (fictional Contoso demo)"
   - image: "./assets/avd-manager/05-governance.png"
     alt: "Governance page listing read-only checks with pass, warn and fail results"
     caption: "Governance: read-only checks with pass, warn and fail results (fictional Contoso demo)"
@@ -46,5 +46,5 @@ The demo runs on a fictional, in-memory Contoso estate with a reset button. Reve
 - **Cost:** spend, host runtime, idle hosts, savings and FSLogix usage.
 - **FSLogix profiles:** size, orphan and duplicate detection, restore and reset.
 - **Monitoring:** curated KQL views, with alert acknowledge and snooze.
-- **Governance:** about 13 read-only checks, for example delete locks, private endpoints, Key Vault purge protection, budget and diagnostic settings.
+- **Governance:** 12 read-only checks, for example delete locks, private endpoints, Key Vault purge protection, budget and diagnostic settings.
 - **Audit** of every change, plus a command palette and keyboard shortcuts.

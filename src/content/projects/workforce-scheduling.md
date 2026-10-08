@@ -29,7 +29,7 @@ Source is in a private repository and available on request.
 - **Client portal:** a client's contacts raise requests and see confirmations, with CSV and print export.
 - **Coordinators:** edit requests, reschedule by drag and drop, reassign with a confirmation step, and work from their own board of routed shifts.
 - **Mobile staff app:** device time clock with an offline queue, background location, and timesheet.
-- **Time capture rules:** time entries close at the scheduled end, and unverified closes are flagged. A late clock-in becomes a no-show, with an override that needs approval.
+- **Time capture rules:** time entries close at the scheduled end, and unverified closes are flagged. A shift with no clock-in within an hour of its start is marked a no-show, and a late clock-in then needs a coordinator's approval.
 - **Access control:** the API checks permissions, not role names, on every route, so read-only roles cannot write.
 - **Hosting:** the API scales to zero when idle. The live demo runs on sample data.
 
