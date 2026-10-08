@@ -22,11 +22,13 @@ Sign-in is limited to the store owner, so the live link shows the Microsoft sign
 - **Data:** Azure SQL serverless on the free offer, Entra-only authentication, auto-pause when idle. Prisma for schema and queries.
 - **Identity and secrets:** one user-assigned managed identity pulls images from Azure Container Registry, reads Key Vault through RBAC and connects to SQL with an Entra token. No SQL passwords or secrets in code, CI logs or app settings.
 - **Shopify access:** a Dev Dashboard app installed on both stores; short-lived tokens through the client-credentials grant, refreshed before expiry.
+- **Shopify writes:** limited to an allow-list of four mutations (product status, URL redirect, variant price update and publish). Each runs only from an approved card and is written to the audit log.
 - **Delivery:** GitHub Actions with OIDC federated credentials (no stored Azure secrets); Bicep infrastructure with a what-if job on every change and a confirm-gated deploy; dev → preview → approve → production.
 
 ## Roadmap
 
-1. **Read-only dashboard (in build):** orders and revenue, funnel, active vs sold-out products, collection coverage, price anomalies, shipping checks and run history.
-2. **Approvals inbox:** approving a card runs the Shopify write (draft a product, add a redirect, reprice), with an audit log.
-3. **Ads monitoring:** Meta and Google Ads read access, plus one autonomous rule: pause a campaign that spends $30 or more with no add-to-carts, then notify.
-4. **Morning run in the cloud:** scheduled steps move to Container Apps Jobs; only browser-only steps stay on a desktop agent that reports back to the API.
+1. **Read-only dashboard (built and live since 2026-10-07):** orders and revenue, funnel, active vs sold-out products, collection coverage, price anomalies, shipping checks and run history.
+2. **Approvals inbox (built and live since 2026-10-07):** approval cards support approve, reject, snooze and retry. Approving a card runs the Shopify write, and every write goes to an audit log.
+3. **Ads monitoring (planned):** Meta and Google Ads read access, plus one autonomous rule: pause a campaign that spends $30 or more with no add-to-carts, then notify.
+4. **Morning run in the cloud (planned):** scheduled steps move to Container Apps Jobs; only browser-only steps stay on a desktop agent that reports back to the API.
+5. **Content and alerts (planned).**

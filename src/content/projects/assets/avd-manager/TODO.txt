@@ -1,6 +1,0 @@
-Screenshots wanted:
-01-host-pools.png   host pools
-02-sessions.png     user sessions
-03-images.png       golden images
-04-cost.png         cost
-PNG/JPG, at least 1200px wide. No tenant IDs, subscription IDs, IPs, emails. Then add gallery: items to the .md referencing ./assets/<slug>/<file>.

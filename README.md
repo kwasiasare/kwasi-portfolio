@@ -216,7 +216,7 @@ Six products built under Spreadcom LLC (`shipped` = live for real users):
 |---|---|---|
 | 1 | salloma.com | Shipped |
 | 2 | ShiftBoard (Workforce Scheduling Platform) | Shipped |
-| 3 | IntuneManager | In Progress |
-| 4 | AVD Manager | In Progress |
-| 5 | Shop Manager | In Progress |
+| 3 | AVD Manager | Shipped |
+| 4 | IntuneManager | Shipped |
+| 5 | Shopify Manager | In Progress |
 | 6 | Guardian Baseline | In Progress |
