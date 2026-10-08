@@ -9,6 +9,19 @@ problem: "Running two stores meant a daily checklist across Shopify, ad platform
 architecture: "A React single-page app on Azure Static Web Apps signs in with Microsoft Entra ID and calls an Express API on Azure Container Apps that validates the Entra token against an allow-list. A scheduled Container Apps Job, built from the same image as the API, refreshes store data from the official Shopify Admin GraphQL API into Azure SQL. Everything runs as a user-assigned managed identity: Azure SQL uses Entra-only authentication, secrets live in Key Vault and are referenced by URL, and images are pulled from Azure Container Registry with the same identity, so no password exists anywhere. GitHub Actions deploys through OIDC federated credentials; infrastructure is Bicep with a what-if check on every change and a confirm-gated deploy. Dev runs as a named preview environment on the same resources; production deploys only after the owner approves the merge."
 stack: ["React 18", "Vite", "TypeScript", "Express", "Zod", "Prisma", "Microsoft Entra ID (MSAL)", "Shopify Admin GraphQL", "Azure Static Web Apps", "Azure Container Apps + Jobs", "Azure SQL (serverless, Entra-only)", "Azure Key Vault", "Managed identity", "Azure Container Registry", "Log Analytics", "Bicep", "GitHub Actions (OIDC)"]
 repoVisibility: "private"
+gallery:
+  - image: "./assets/shop-manager/01-dashboard.png"
+    alt: "Side-by-side dashboard for two stores with traffic charts, catalog counts, collection coverage and price anomalies; store names and live figures blurred"
+    caption: "Dashboard: both stores side by side (store names and live figures blurred)"
+  - image: "./assets/shop-manager/02-inbox.png"
+    alt: "Approvals inbox listing draft-and-redirect cards for sold-out products, each with created and expiry times"
+    caption: "Approvals inbox: each card runs one allow-listed Shopify write when approved"
+  - image: "./assets/shop-manager/03-runs.png"
+    alt: "Runs table showing the scheduled refresh job succeeding every fifteen minutes"
+    caption: "Run history from the scheduled Container Apps Job"
+  - image: "./assets/shop-manager/04-audit.png"
+    alt: "Audit log of approval and agent events with actor, action, store, target and card; agent identifier blurred"
+    caption: "Audit log of every approval and agent event"
 liveUrl: "https://black-meadow-0de3a880f.2.azurestaticapps.net/"
 ---
 
