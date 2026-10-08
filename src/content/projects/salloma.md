@@ -4,7 +4,7 @@ order: 1
 status: "shipped"
 category: "product"
 org: "Spreadcom LLC"
-summary: "Live IT training platform with 390+ lessons across 12 tracks, a course-grounded AI tutor, and a hardened API."
+summary: "Live IT training platform with 360 lessons across 12 courses, a course-grounded AI tutor, and a hardened API."
 problem: "Hands-on IT career training needs structured, project-based courses and help that stays on the material. salloma.com delivers lessons with video, learning objectives, and an AI tutor grounded in the course content rather than the open web."
 architecture: "Astro front end on Azure Static Web Apps with video served from Cloudflare R2. A course-grounded AI tutor and a two-stage cross-course chatbot sit behind an API with a 118-test suite, a strict Content Security Policy, and prompt-injection hardening."
 gallery:

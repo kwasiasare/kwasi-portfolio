@@ -1,14 +1,24 @@
 ---
 title: "IntuneManager"
-order: 3
-status: "in-progress"
+order: 4
+status: "shipped"
 category: "product"
 org: "Spreadcom LLC"
-summary: "Per-tenant Electron desktop app for Windows endpoint management through Microsoft Intune: device health, installed-app version drift against winget, and AI-assisted Win32 packaging and deployment."
-problem: "Managing a Windows endpoint fleet in Intune typically requires navigating across multiple portal blades to check device compliance, app deployment status, manually version-checking each app, and hand-building .intunewin packages. IntuneManager consolidates these workflows into a single desktop application: a unified dashboard for device health and app inventory, automatic winget version checking per app, batch updating with a queued pipeline, and an AI agent that handles the full packaging process from installer download to deployment."
-architecture: "Electron main process on Windows with a React and TypeScript renderer built with Vite. Local state lives in SQLite and reaches the UI over IPC. A PowerShell bridge spawns powershell.exe to authenticate to Microsoft Graph and manage Intune resources. A Claude agent pipeline handles app discovery, installer download, script generation, .intunewin packaging with IntuneWinAppUtil, and upload to Intune, with separate package-only and upload-only modes so an admin can review a package before it is deployed."
-stack: ["Electron", "React", "TypeScript", "Vite", "SQLite", "PowerShell", "Microsoft Graph API", "Microsoft Intune", "WinGet", "Claude API", "IntuneWinAppUtil"]
+summary: "Web app that turns Intune app packaging and deployment into one workflow for Windows and macOS, with a Claude agent doing the packaging."
+problem: "Packaging and deploying apps through Intune means checking versions by hand, building .intunewin packages, writing install, uninstall and detection scripts, and moving between several portal blades. IntuneManager puts discovery, packaging, upload, deployment history and device status in one web app, and a Claude agent handles the packaging steps."
+architecture: "A React 18 and Vite single-page app and an Express (Node 20, TypeScript) API run in one container with PowerShell 7 and WinTuner for .intunewin packaging. It runs on Azure Container Apps, scaling to zero, with Azure SQL serverless on the free offer (auto-pause, with a database-waking notice) through Prisma. Key Vault is read through a managed identity, and installers up to 4 GiB are stored in Blob storage. OpenID Connect sign-in is pinned to one Entra tenant, with an allow-list and viewer, operator and admin roles. The Microsoft Graph connection uses a separate delegated flow with encrypted tokens. GitHub Actions deploys GHCR images over OIDC, with migrations and a health-check smoke test. Infrastructure is Bicep, including a budget alert."
+stack: ["React 18", "Vite", "TypeScript", "Express", "Node 20", "Prisma", "PowerShell 7", "WinTuner", "Microsoft Graph API", "Microsoft Intune", "WinGet", "Chocolatey", "Homebrew", "Claude API", "Azure Container Apps", "Azure SQL (serverless)", "Azure Key Vault", "Managed identity", "Azure Blob Storage", "Bicep", "GitHub Actions (OIDC)"]
 repoVisibility: "private"
 confluenceUrl: "https://spreadcomgh.atlassian.net/wiki/spaces/IM/pages/1376300"
 confluenceLabel: "Confluence docs (IntuneManager)"
 ---
+
+Sign-in is restricted to allow-listed users in Spreadcom's own tenant, so there is no public demo link. Source is in a private repository and available on request.
+
+## Features
+
+- **Windows Win32 packaging by a Claude agent:** winget and Chocolatey search, installer download, install, uninstall and detection scripts, build and upload to Intune. Newer versions are detected, and an "Update All" queue applies them.
+- **macOS:** .pkg and .dmg upload with bundle inspection, and a Homebrew cask catalog with one-click deploy.
+- **Devices:** compliance, Windows and driver update sync, and diagnostics.
+- **History and audit:** deployment history with CSV and JSON export, an audit log and an admin audit.
+- **Hardening:** CSRF and Origin checks, an SSRF policy, an upload allow-list with magic-byte checks and size caps, and a non-root container.
