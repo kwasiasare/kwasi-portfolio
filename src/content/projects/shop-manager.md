@@ -1,10 +1,10 @@
 ---
 title: "Shopify Manager — Store Operations Dashboard"
-order: 5
-status: "in-progress"
+order: 6
+status: "shipped"
 category: "product"
 org: "Spreadcom LLC"
-summary: "One private web app to run two Shopify stores — a side-by-side dashboard and an approvals inbox, with an automated morning run planned — on a serverless Azure stack with no stored passwords."
+summary: "One private web app that runs two Shopify stores: a side-by-side dashboard refreshed every 15 minutes and an approvals inbox where each approved card makes one allow-listed Shopify change. It runs on a serverless Azure stack with no stored passwords."
 problem: "Running two stores meant a daily checklist across Shopify, ad platforms and a scripted browser run writing markdown logs. The app turns that into a dashboard, approval cards and scheduled jobs, so the owner reviews and approves instead of clicking through admin pages."
 architecture: "A React single-page app on Azure Static Web Apps signs in with Microsoft Entra ID and calls an Express API on Azure Container Apps that validates the Entra token against an allow-list. A scheduled Container Apps Job, built from the same image as the API, refreshes store data from the official Shopify Admin GraphQL API into Azure SQL. Everything runs as a user-assigned managed identity: Azure SQL uses Entra-only authentication, secrets live in Key Vault and are referenced by URL, and images are pulled from Azure Container Registry with the same identity, so no password exists anywhere. GitHub Actions deploys through OIDC federated credentials; infrastructure is Bicep with a what-if check on every change and a confirm-gated deploy. Dev runs as a named preview environment on the same resources; production deploys only after the owner approves the merge."
 stack: ["React 18", "Vite", "TypeScript", "Express", "Zod", "Prisma", "Microsoft Entra ID (MSAL)", "Shopify Admin GraphQL", "Azure Static Web Apps", "Azure Container Apps + Jobs", "Azure SQL (Entra-only)", "Azure Key Vault", "Managed identity", "Azure Container Registry", "Log Analytics", "Bicep", "GitHub Actions (OIDC)"]
@@ -38,10 +38,11 @@ Sign-in is limited to the store owner, so the live link shows the Microsoft sign
 - **Shopify writes:** limited to an allow-list of four mutations (product status, URL redirect, variant price update and publish). Each runs only from an approved card and is written to the audit log.
 - **Delivery:** GitHub Actions with OIDC federated credentials (no stored Azure secrets); Bicep infrastructure with a what-if job on every change and a confirm-gated deploy; dev → preview → approve → production.
 
-## Roadmap
+## What it does
 
-1. **Read-only dashboard (built and live since 2026-10-07):** orders and revenue, funnel, active vs sold-out products, collection coverage, price anomalies, shipping checks and run history.
-2. **Approvals inbox (built and live since 2026-10-07):** approval cards support approve, reject, snooze and retry. Approving a card runs the Shopify write, and every write goes to an audit log.
-3. **Ads monitoring (planned):** Meta and Google Ads read access, plus one autonomous rule: pause a campaign that spends $30 or more with no add-to-carts, then notify.
-4. **Morning run in the cloud (planned):** scheduled steps move to Container Apps Jobs; only browser-only steps stay on a desktop agent that reports back to the API.
-5. **Content and alerts (planned).**
+- **Dashboard:** both stores side by side, refreshed by a scheduled job. It shows orders and revenue, the traffic funnel, active vs sold-out products, collection coverage against a minimum, price anomalies, shipping checks and run history.
+- **Approvals inbox:** the refresh job turns problems into approval cards, for example drafting and redirecting a product that has been sold out for 48 hours, fixing a price, or publishing to a sales channel. Cards are de-duplicated, expire, and are re-checked before they run. Approve, reject, snooze or retry; approving runs exactly one of four allow-listed Shopify Admin GraphQL changes.
+- **Audit log:** every approval, change and agent report is recorded.
+- **Desktop agent reports:** the browser-only steps of the daily routine report their results to the API, so the dashboard shows the whole morning run.
+
+Possible extensions, not built: ads monitoring with an automatic pause rule, moving the remaining morning-run steps to cloud jobs, and content scheduling with alerts.

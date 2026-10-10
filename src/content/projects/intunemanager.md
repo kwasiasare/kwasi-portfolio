@@ -1,6 +1,6 @@
 ---
 title: "IntuneManager"
-order: 4
+order: 2
 status: "shipped"
 category: "product"
 org: "Spreadcom LLC"
