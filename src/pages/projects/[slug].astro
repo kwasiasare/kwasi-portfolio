@@ -42,6 +42,7 @@ const {
   confluenceUrl,
   confluenceLabel,
   liveUrl,
+  docsSlug,
 } = project.data;
 const { Content } = await render(project);
 // Entries without a Markdown body (e.g. gallery-only products) must not render
@@ -69,6 +70,7 @@ const hasNotes = Boolean(project.body?.trim());
           confluenceUrl={confluenceUrl}
           confluenceLabel={confluenceLabel}
           liveUrl={liveUrl}
+          docsSlug={docsSlug}
         />
       </header>
 

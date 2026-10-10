@@ -44,6 +44,7 @@ src/
   lib/projects.ts          # published-project query, category grouping/sorting
   content/projects/*.md    # one file per project (top level only) — see "Add a project"
   content/projects/assets/<slug>/  # gallery/diagram images for that project
+  content/docs/*.md        # hosted project documentation (see "Project docs")
   layouts/BaseLayout.astro # <head>, theme bootstrap script, Header/Footer
   components/              # Header, Footer, ThemeToggle, ProjectCard, StatusBadge,
                            # Gallery, ProjectLinks
@@ -51,6 +52,7 @@ src/
     index.astro             # Home/About: summary, certifications, featured projects
     projects/index.astro     # Projects grid (grouped by category, sorted by `order`)
     projects/[slug].astro    # Project detail template
+    docs/[slug].astro        # Project documentation page
     404.astro
   styles/global.css         # design tokens (light/dark), reset, shared components
 public/
@@ -220,3 +222,16 @@ Six products built under Spreadcom LLC (`shipped` = live for real users):
 | 4 | IntuneManager | Shipped |
 | 5 | Shopify Manager | In Progress |
 | 6 | Guardian Baseline | In Progress |
+
+## Project docs
+
+The `docs` collection (`src/content/docs/<slug>.md`, top level only) hosts
+project documentation as pages at `/docs/<slug>/`, because Confluence public
+links are unavailable on the free plan and the Confluence pages require a
+login. Frontmatter: `title`, `project` (slug of the related project),
+`summary`, `sourceLabel`, `updated`. Content is sanitised for public viewing
+(no emails, tenant IDs, private hostnames, resource names, ticket or
+Confluence links). To link a doc, set `docsSlug` on the project entry: the
+project page then shows a "Project docs" button and hides any
+`confluenceUrl`. Wide Markdown tables scroll horizontally inside the doc column
+(`display:block; overflow-x:auto` in the docs template).

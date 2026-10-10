@@ -22,7 +22,7 @@ liveUrl: "https://www.salloma.com"
 repoUrl: "https://github.com/kwasiasare/tw-training-site"
 repoName: "tw-training-site"
 repoVisibility: "public"
-confluenceUrl: "https://spreadcomgh.atlassian.net/wiki/spaces/Trainingwe/pages/27361281"
+docsSlug: "salloma"
 ---
 
 ## How the chatbot answers a question

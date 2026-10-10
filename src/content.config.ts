@@ -54,6 +54,9 @@ const projects = defineCollection({
       repoVisibility: z.enum(["public", "private", "pending"]).default("public"),
       confluenceUrl: z.url().optional(),
       confluenceLabel: z.string().default("Confluence docs"),
+      // Slug of an entry in the `docs` collection. When set, the links row shows
+      // an internal "Project docs" link and suppresses the Confluence link.
+      docsSlug: z.string().optional(),
       liveUrl: z.url().optional(),
     })
     // Privacy guard: a private/pending entry must never carry a repo URL, so
@@ -64,4 +67,23 @@ const projects = defineCollection({
     }),
 });
 
-export const collections = { projects };
+// Project documentation hosted on this site (src/content/docs/<slug>.md),
+// mirrored from private Confluence spaces and sanitised for public viewing.
+const docs = defineCollection({
+  loader: glob({ pattern: "*.md", base: "./src/content/docs" }),
+  schema: z.object({
+    title: z.string(),
+    // Slug of the related entry in the `projects` collection.
+    project: z.string(),
+    summary: z.string(),
+    sourceLabel: z.string(),
+    // Display date, e.g. "2026-10-09".
+    updated: z.string(),
+    // Position among a project's docs (lower first). The main doc omits `parent`.
+    order: z.number().default(0),
+    // Slug of the project's main doc; set on child docs only.
+    parent: z.string().optional(),
+  }),
+});
+
+export const collections = { projects, docs };

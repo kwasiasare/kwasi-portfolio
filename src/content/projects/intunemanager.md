@@ -25,8 +25,7 @@ gallery:
   - image: "./assets/intunemanager/05-history.png"
     alt: "Deployment history with operation type, status, duration and error details, plus CSV export"
     caption: "Deployment history with CSV/JSON export"
-confluenceUrl: "https://spreadcomgh.atlassian.net/wiki/spaces/IM/pages/1376300"
-confluenceLabel: "Confluence docs (IntuneManager)"
+docsSlug: "intunemanager"
 ---
 
 Sign-in is restricted to allow-listed users in Spreadcom's own tenant, so there is no public demo link. Source is in a private repository and available on request.
