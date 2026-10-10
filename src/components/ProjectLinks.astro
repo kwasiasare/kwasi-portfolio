@@ -6,9 +6,11 @@ interface Props {
   confluenceUrl?: string;
   confluenceLabel: string;
   liveUrl?: string;
+  docsSlug?: string;
 }
 
-const { repoUrl, repoName, repoVisibility, confluenceUrl, confluenceLabel, liveUrl } = Astro.props;
+const { repoUrl, repoName, repoVisibility, confluenceUrl, confluenceLabel, liveUrl, docsSlug } =
+  Astro.props;
 const showRepoLink = repoVisibility === "public" && !!repoUrl;
 ---
 
@@ -36,7 +38,12 @@ const showRepoLink = repoVisibility === "public" && !!repoUrl;
       <code>{repoName}</code> — repository will be linked here once this project ships publicly.
     </span>
   ) : null}
-  {confluenceUrl && (
+  {docsSlug && (
+    <a class="btn btn-secondary" href={`/docs/${docsSlug}/`}>
+      Project docs
+    </a>
+  )}
+  {!docsSlug && confluenceUrl && (
     <a class="btn btn-secondary" href={confluenceUrl} target="_blank" rel="noopener noreferrer">
       {confluenceLabel}
     </a>

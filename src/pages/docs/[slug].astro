@@ -1,0 +1,268 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, getEntry, render, type CollectionEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const docs = await getCollection("docs");
+  return docs.map((doc) => ({
+    params: { slug: doc.id },
+    props: { doc },
+  }));
+}
+
+interface Props {
+  doc: CollectionEntry<"docs">;
+}
+
+const { doc } = Astro.props;
+const { title, summary, sourceLabel, updated } = doc.data;
+const projectId = doc.data.project.id;
+const related = await getEntry("projects", projectId);
+// `project` is a validated reference, so this only trips if the project was
+// deleted after sync; fail the build rather than ship a dangling link.
+if (!related) throw new Error(`docs/${doc.id}: project "${projectId}" not found`);
+const projectTitle = related.data.title;
+const { Content } = await render(doc);
+const mainId = doc.data.parent?.id ?? doc.id;
+const isChild = Boolean(doc.data.parent);
+// reference() only shapes the value; it does not fail the build on a typo.
+if (isChild && !(await getEntry("docs", mainId))) {
+  throw new Error(`docs/${doc.id}: parent doc "${mainId}" not found`);
+}
+const siblings = (await getCollection("docs", ({ data }) => data.project.id === projectId))
+  .sort((a, b) => Number(!!a.data.parent) - Number(!!b.data.parent) || a.data.order - b.data.order);
+---
+
+<BaseLayout title={title} description={summary}>
+  <article class="section doc">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/docs/">Documents</a></li>
+          {isChild ? (
+            <>
+              <li><a href={`/docs/${mainId}/`}>{projectTitle}</a></li>
+              <li aria-current="page">{title}</li>
+            </>
+          ) : (
+            <li aria-current="page">{projectTitle}</li>
+          )}
+        </ol>
+      </nav>
+
+      <header class="doc-head">
+        <h1>{title}</h1>
+        <p class="doc-summary">{summary}</p>
+        <p class="doc-meta">Last updated {updated} · {sourceLabel}</p>
+      </header>
+
+      <div class="doc-body">
+        <Content />
+      </div>
+
+      <aside class="more-docs" aria-labelledby="more-docs-heading">
+        <h2 id="more-docs-heading">More about {projectTitle}</h2>
+        {siblings.length > 1 && (
+          <ul>
+            {siblings.map((d) => (
+              <li>
+                {d.id === doc.id ? (
+                  <span aria-current="page">{d.data.title}</span>
+                ) : (
+                  <a href={`/docs/${d.id}/`}>{d.data.title}</a>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+        <p><a href={`/projects/${projectId}/`}>← Back to the project page</a></p>
+      </aside>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .crumbs {
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .crumbs ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .crumbs li + li::before {
+    content: "›";
+    margin-right: 0.4rem;
+    color: var(--color-text-muted);
+  }
+
+  .crumbs a {
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .crumbs [aria-current="page"] {
+    color: var(--color-text-muted);
+  }
+
+  .more-docs {
+    max-width: 52rem;
+    margin-top: 3rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--color-bg-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .more-docs h2 {
+    margin: 0 0 0.6rem;
+    font-size: 1.1rem;
+  }
+
+  .more-docs ul {
+    margin: 0 0 0.75rem;
+    padding-left: 1.25rem;
+  }
+
+  .more-docs [aria-current="page"] {
+    font-weight: 700;
+  }
+
+  .more-docs p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  .doc-head {
+    max-width: 46rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .doc-head h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2rem, 4.5vw, 2.75rem);
+  }
+
+  .doc-summary {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    margin: 0 0 0.75rem;
+  }
+
+  .doc-meta {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .doc-body {
+    max-width: 52rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .doc-body :global(h2) {
+    font-size: 1.4rem;
+    margin: 2.25rem 0 0.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .doc-body :global(h2:first-child) {
+    border-top: 0;
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  .doc-body :global(h3) {
+    font-size: 1.1rem;
+    margin: 1.75rem 0 0.5rem;
+  }
+
+  .doc-body :global(p) {
+    margin: 0 0 1rem;
+  }
+
+  .doc-body :global(ul),
+  .doc-body :global(ol) {
+    margin: 0 0 1rem;
+    padding-left: 1.5rem;
+  }
+
+  .doc-body :global(li) {
+    margin-bottom: 0.35rem;
+  }
+
+  .doc-body :global(a) {
+    color: var(--color-accent-strong);
+  }
+
+  .doc-body :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--color-bg-inset);
+    border: 1px solid var(--color-border);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    overflow-wrap: anywhere;
+  }
+
+  .doc-body :global(pre) {
+    background: var(--color-bg-inset);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 0 0 1.25rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .doc-body :global(pre code) {
+    background: none;
+    border: 0;
+    padding: 0;
+    overflow-wrap: normal;
+  }
+
+  /* Block-level table that hugs its content and scrolls horizontally when
+     wider than the column, so narrow viewports never overflow the page. */
+  .doc-body :global(table) {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    margin: 0 0 1.25rem;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .doc-body :global(th),
+  .doc-body :global(td) {
+    text-align: left;
+    vertical-align: top;
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+    overflow-wrap: normal;
+  }
+
+  .doc-body :global(th) {
+    background: var(--color-bg-inset);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .doc-body :global(tr:last-child td) {
+    border-bottom: 0;
+  }
+</style>

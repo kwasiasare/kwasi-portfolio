@@ -1,4 +1,4 @@
-import { defineCollection } from "astro:content";
+import { defineCollection, reference } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "zod";
 
@@ -54,6 +54,10 @@ const projects = defineCollection({
       repoVisibility: z.enum(["public", "private", "pending"]).default("public"),
       confluenceUrl: z.url().optional(),
       confluenceLabel: z.string().default("Confluence docs"),
+      // Entry in the `docs` collection (validated at build time). When set, the
+      // links row shows an internal "Project docs" link and suppresses the
+      // Confluence link.
+      docsSlug: reference("docs").optional(),
       liveUrl: z.url().optional(),
     })
     // Privacy guard: a private/pending entry must never carry a repo URL, so
@@ -64,4 +68,23 @@ const projects = defineCollection({
     }),
 });
 
-export const collections = { projects };
+// Project documentation hosted on this site (src/content/docs/<slug>.md),
+// mirrored from private Confluence spaces and sanitised for public viewing.
+const docs = defineCollection({
+  loader: glob({ pattern: "*.md", base: "./src/content/docs" }),
+  schema: z.object({
+    title: z.string(),
+    // Related entry in the `projects` collection (validated at build time).
+    project: reference("projects"),
+    summary: z.string(),
+    sourceLabel: z.string(),
+    // Display date, ISO calendar date, e.g. "2026-10-09".
+    updated: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "updated must be YYYY-MM-DD"),
+    // Position among a project's docs (lower first). The main doc omits `parent`.
+    order: z.number().default(0),
+    // The project's main doc (validated at build time); set on child docs only.
+    parent: reference("docs").optional(),
+  }),
+});
+
+export const collections = { projects, docs };
