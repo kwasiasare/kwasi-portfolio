@@ -4,7 +4,7 @@ import StatusBadge from "../../components/StatusBadge.astro";
 import Gallery from "../../components/Gallery.astro";
 import ProjectLinks from "../../components/ProjectLinks.astro";
 import { Image } from "astro:assets";
-import { render, type CollectionEntry } from "astro:content";
+import { getEntry, render, type CollectionEntry } from "astro:content";
 import { getPublishedProjects } from "../../lib/projects";
 
 export async function getStaticPaths() {
@@ -45,6 +45,11 @@ const {
   docsSlug,
 } = project.data;
 const { Content } = await render(project);
+// `docsSlug` is a reference(), which only shapes the value; confirm the doc
+// exists so a typo fails the build instead of shipping a 404 button.
+if (docsSlug && !(await getEntry("docs", docsSlug.id))) {
+  throw new Error(`projects/${project.id}: docsSlug "${docsSlug.id}" not found`);
+}
 // Entries without a Markdown body (e.g. gallery-only products) must not render
 // an empty bordered notes section.
 const hasNotes = Boolean(project.body?.trim());
@@ -70,7 +75,7 @@ const hasNotes = Boolean(project.body?.trim());
           confluenceUrl={confluenceUrl}
           confluenceLabel={confluenceLabel}
           liveUrl={liveUrl}
-          docsSlug={docsSlug}
+          docsSlug={docsSlug?.id}
         />
       </header>
 

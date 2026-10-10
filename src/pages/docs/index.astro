@@ -12,7 +12,7 @@ const groups = projects
   .map((p) => ({
     project: p,
     docs: docs
-      .filter((d) => d.data.project === p.id)
+      .filter((d) => d.data.project.id === p.id)
       .sort((a, b) => Number(!!a.data.parent) - Number(!!b.data.parent) || a.data.order - b.data.order),
   }))
   .filter((g) => g.docs.length > 0);

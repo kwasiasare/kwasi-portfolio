@@ -61,7 +61,7 @@ CI does this automatically; you rarely need to build by hand.
 | `site/` | Astro app (pages, components, content, styles) |
 | `site/src/consts.ts` | Curriculum outline and the video CDN base |
 | `site/public/staticwebapp.config.json` | Static Web Apps routing / MIME / cache config (copied into the build) |
-| `videos/_decks/*.json` | Lesson decks, the source of truth |
+| `course-materials/<slug>/decks/*.json` | Lesson decks, the source of truth (one folder per course) |
 | `make_*.py`, `doc_helpers.py` | Generate Word/PPTX study materials |
 | `make_slides.py`, `render_narration_azure.py`, `build_one_video.py`, `batch_render.py` | Deck, slides, narration and MP4 pipeline |
 | `convert_decks_to_md.py` | Deck JSON to Astro lesson markdown |

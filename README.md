@@ -52,6 +52,7 @@ src/
     index.astro             # Home/About: summary, certifications, featured projects
     projects/index.astro     # Projects grid (grouped by category, sorted by `order`)
     projects/[slug].astro    # Project detail template
+    docs/index.astro         # Documents index (docs grouped by project)
     docs/[slug].astro        # Project documentation page
     404.astro
   styles/global.css         # design tokens (light/dark), reset, shared components
@@ -228,8 +229,10 @@ Six products built under Spreadcom LLC (`shipped` = live for real users):
 The `docs` collection (`src/content/docs/<slug>.md`, top level only) hosts
 project documentation as pages at `/docs/<slug>/`, because Confluence public
 links are unavailable on the free plan and the Confluence pages require a
-login. Frontmatter: `title`, `project` (slug of the related project),
-`summary`, `sourceLabel`, `updated`. Content is sanitised for public viewing
+login. Frontmatter: `title`, `project` (slug of the related project), `summary`,
+`sourceLabel`, `updated` (YYYY-MM-DD), optional `parent` (slug of the
+project's main doc) and `order`. `project`, `parent` and `docsSlug` are Astro
+`reference()`s, so a typo fails the build instead of shipping a broken link. Content is sanitised for public viewing
 (no emails, tenant IDs, private hostnames, resource names, ticket or
 Confluence links). To link a doc, set `docsSlug` on the project entry: the
 project page then shows a "Project docs" button and hides any

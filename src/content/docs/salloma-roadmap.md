@@ -59,17 +59,17 @@ Status of the platform build-out. This page is a snapshot (updated 2026-07-27); 
 | Course quality remediation (Phase 2) | A few remaining course tasks queued |
 | Video delivery via R2 | Signed short-lived URLs and player integration, then make the bucket private |
 | Admin dashboard | Most-watched/drop-off analytics (needs view-event tracking) and course management |
-| Foundation | Bare-apex domain (blocked on a domain transfer) and moving secrets/config to Key Vault |
+| Foundation | Bare-apex domain (blocked on a domain transfer) and configuration hardening |
 | Content production pipeline | Pipeline hardening and voice/QA standards |
 
 ## Not started
 
-Quality, security and launch: automated tests, security review, accessibility pass to WCAG 2.1 AA, performance and cost review, monitoring and alerting, a go-live runbook, and a fix for a role-enumeration weakness that needs a dev-tested auth change.
+Quality, security and launch: automated tests, security review, accessibility pass to WCAG 2.1 AA, performance and cost review, monitoring and alerting and a go-live runbook.
 
 ## Recommended next slice
 
 1. Ship the homepage narrative and decide on the site brand/title.
-2. Security follow-ups: CSP with inline-script nonces, least-privilege credentials for R2 and Cosmos, and the role-enumeration fix.
+2. Security hardening follow-ups from the June and July reviews (tracked in the private backlog).
 3. Quality and security epic: homepage smoke test in CI (assert 12 course tiles in the build), accessibility, performance/cost, go-live runbook.
 
 **Peer review:** every push runs a persona review framework before merge. Course content additionally passes a seven-reviewer review (five personas, a professor-grade reviewer and a top-industry peer), each verifying certification-domain coverage, plus an **adversarial fact-check** against authoritative documentation (e.g. Microsoft Learn) before the production merge.
