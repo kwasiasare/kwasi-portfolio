@@ -1,10 +1,12 @@
 ---
 title: "IntuneManager: Project Overview"
 project: "intunemanager"
-summary: "Architecture, authentication and session design, roles, security controls, data model, cost design and limitations of IntuneManager."
-sourceLabel: "Mirrored from the project's Confluence documentation"
-updated: "2026-10-07"
+summary: "Architecture, Claude via Microsoft Foundry, authentication and session design, roles, security controls, data model, cost design and limitations of IntuneManager."
+sourceLabel: "Mirrored from the project's repository overview, plus the October 2026 app-deletion and Foundry changes"
+updated: "2026-10-10"
 ---
+
+This page reflects the repository's project overview together with two October 2026 changes: admin-only deletion of Intune apps, and Claude served from Microsoft Foundry.
 
 ## What is IntuneManager?
 
@@ -32,6 +34,7 @@ It runs as one container on Azure Container Apps. There is no desktop (Electron)
 - Role-based access: viewer, operator, admin, superadmin
 - Tenant connect/disconnect (delegated Graph permissions, OAuth2 authorization code + PKCE, or device code)
 - User allow-list management, admin audit log, deployment history with CSV/JSON export
+- Admin-only deletion of an Intune app (Windows or macOS) with a typed-name confirmation; blocked while the app still has assignments unless explicitly forced, and every attempt (including refused ones) is written to the admin audit log
 - Device list with compliance, Windows/driver update sync and diagnostics requests
 
 ## Architecture
@@ -45,6 +48,7 @@ It runs as one container on Azure Container Apps. There is no desktop (Electron)
 | Storage | Azure Files mounted into the container for source and output; Blob Storage for direct installer uploads |
 | Hosting | Azure Container Apps, West US 3, Consumption plan, single revision, min 0 / max 1 replica |
 | Secrets | Held in Key Vault and read by a user-assigned managed identity |
+| Claude | Claude via Microsoft Foundry, authenticated with the app's user-assigned managed identity (keyless, so no API key is stored for the live path); the direct Anthropic API and then AWS Bedrock are fallbacks; the model is chosen by a setting (default Claude Sonnet) |
 | CI/CD | GitHub Actions (CI and deploy workflows), Azure login by OIDC |
 
 ### Authentication and sessions
@@ -71,12 +75,12 @@ Enforced centrally in `server/middleware/rbac.ts`. Insufficient role is always `
 - CSRF: state-changing `/api` calls must carry a custom `X-Requested-With` header and an allowed `Origin`.
 - SSRF policy for server-side downloads (private ranges, the Azure wireserver and 6to4-embedded IPv4 are blocked).
 - Upload validation: extension allow-list, magic-byte sniffing, 4 GiB size cap.
-- Secrets arrive as environment variables sourced from Key Vault; the Anthropic key is never stored in the database or returned by any endpoint. Responses that carry secrets are `no-store`.
+- Secrets arrive as environment variables sourced from Key Vault. The live Claude path is keyless (managed identity); any fallback API key is never stored in the database or returned by any endpoint, and the settings API exposes only a boolean "Foundry configured" flag, never the resource name. Responses that carry secrets are `no-store`.
 - The container runs as non-root (uid/gid 1000).
 
 ### Data model (Prisma)
 
-`User`, `Session`, `TenantConfig`, `OAuthState`, `AppSetting` (key-value, also the cache), `GroupAssignmentHistory`, `WtDetectedUpdate`, `AppDeployment` (job history), `AdminAuditLog` (append-only: user add/role change/delete, settings update/clear cache, tenant connect/disconnect).
+`User`, `Session`, `TenantConfig`, `OAuthState`, `AppSetting` (key-value, also the cache), `GroupAssignmentHistory`, `WtDetectedUpdate`, `AppDeployment` (job history), `AdminAuditLog` (append-only: user add/role change/delete, settings update/clear cache, tenant connect/disconnect, Intune app delete and refused delete attempts).
 
 ## Deployment and cost
 
@@ -110,8 +114,8 @@ IntuneManagerUI/
     ├── app.ts, index.ts  Express app and bootstrap
     ├── middleware/       auth, csrf, rbac, async-routes
     ├── routes/           auth, ms-signin, ms-auth, ps, ai, deployments (+macos, +macos-cask),
-    │                     catalog-macos, settings, admin, events, health
-    ├── services/         graph-auth, ms-signin, session, encryption, ps-bridge, blob-sas,
+    │                     catalog-macos, intune-apps, settings, admin, events, health
+    ├── services/         graph-auth, ms-signin, session, encryption, ps-bridge, blob-sas, claude-client,
     │                     macos-inspect, cask-resolve/-downloader/-unwrap, upload-validator, ...
     ├── ps-scripts/       PowerShell bridge scripts (Graph/Intune operations)
     └── prisma/           schema.prisma and migrations
@@ -123,6 +127,10 @@ docs/                     project documentation
 ### PowerShell bridge protocol
 
 Scripts print `LOG:<level text>` lines (streamed to the job log) and a final `RESULT:<json>` line (the return value). `runPsScript()` in `ps-bridge.ts` parses both, applies a per-script timeout (scalable with a multiplier setting) and kills the process on timeout or cancellation.
+
+### Claude via Microsoft Foundry
+
+A single client factory picks the connection at startup: Microsoft Foundry when a Foundry resource is configured (in production the token comes from the app's user-assigned managed identity; an API key is accepted only for local development), otherwise the direct Anthropic API, otherwise AWS Bedrock from Settings. The model is a deployment name read from a setting (default Claude Sonnet). The tool-use loop classifies every stop reason: refusals, token-limit and context-overflow stops fail the job with a readable error instead of looping, `pause_turn` re-sends the conversation, and authentication failures are mapped to a remedy for the active provider. The managed-identity token provider is cached per process rather than created per job.
 
 ### Claude packaging tools
 
