@@ -1,6 +1,6 @@
 ---
 title: "ShiftBoard — Workforce Scheduling Platform"
-order: 2
+order: 4
 status: "shipped"
 category: "product"
 org: "Spreadcom LLC"

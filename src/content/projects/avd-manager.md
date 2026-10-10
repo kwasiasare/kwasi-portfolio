@@ -1,6 +1,6 @@
 ---
 title: "AVD Manager — Azure Virtual Desktop Operations"
-order: 3
+order: 1
 status: "shipped"
 category: "product"
 org: "Spreadcom LLC"

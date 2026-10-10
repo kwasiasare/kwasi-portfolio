@@ -217,12 +217,12 @@ Six products built under Spreadcom LLC (`shipped` = live for real users):
 
 | Order | Project | Status |
 |---|---|---|
-| 1 | salloma.com | Shipped |
-| 2 | ShiftBoard (Workforce Scheduling Platform) | Shipped |
-| 3 | AVD Manager | Shipped |
-| 4 | IntuneManager | Shipped |
-| 5 | Shopify Manager | In Progress |
-| 6 | Guardian Baseline | In Progress |
+| 1 | AVD Manager | Shipped |
+| 2 | IntuneManager | Shipped |
+| 3 | salloma.com | Shipped |
+| 4 | ShiftBoard (Workforce Scheduling Platform) | Shipped |
+| 5 | Guardian Baseline (with its four building-block repos) | In Progress |
+| 6 | Shopify Manager | Shipped |
 
 ## Project docs
 

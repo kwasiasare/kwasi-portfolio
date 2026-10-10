@@ -1,6 +1,6 @@
 ---
 title: "salloma.com — IT Training Platform"
-order: 1
+order: 3
 status: "shipped"
 category: "product"
 org: "Spreadcom LLC"
