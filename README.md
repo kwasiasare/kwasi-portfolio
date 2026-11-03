@@ -213,7 +213,7 @@ the Oryx builder inside the SWA action rebuild it.
 
 ## Status
 
-Six products built under Spreadcom LLC (`shipped` = live for real users):
+Seven products built under Spreadcom LLC (`shipped` = live for real users):
 
 | Order | Project | Status |
 |---|---|---|
@@ -223,6 +223,7 @@ Six products built under Spreadcom LLC (`shipped` = live for real users):
 | 4 | ShiftBoard (Workforce Scheduling Platform) | Shipped |
 | 5 | Guardian Baseline (with its four building-block repos) | In Progress |
 | 6 | Shopify Manager | Shipped |
+| 7 | Spreadcom Assist (AI architect capstone) | In Progress |
 
 ## Project docs
 
