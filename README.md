@@ -213,7 +213,7 @@ the Oryx builder inside the SWA action rebuild it.
 
 ## Status
 
-Six products built under Spreadcom LLC (`shipped` = live for real users):
+Seven products built under Spreadcom LLC (`shipped` = live for real users):
 
 | Order | Project | Status |
 |---|---|---|
